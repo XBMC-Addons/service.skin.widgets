@@ -438,7 +438,7 @@ class Main:
             #only on db update
             self._fetch_movies('RecommendedMovie')
             self._fetch_tvshows_recommended('RecommendedEpisode')
-        elif type == 'album':
+        elif type == 'music':
             self._fetch_albums('RecommendedAlbum')
         if self.RANDOMITEMS_UPDATE_METHOD == 1:
             # update random if db update is selected instead of timer
@@ -446,7 +446,7 @@ class Main:
                 self._fetch_movies('RandomMovie')
                 self._fetch_tvshows_randomitems('RandomEpisode')
                 self._fetch_musicvideo('RandomMusicVideo')
-            elif type == 'album':
+            elif type == 'music':
                 self._fetch_albums('RandomAlbum')
                 self._fetch_artist('RandomArtist')
                 self._fetch_song('RandomSong')
