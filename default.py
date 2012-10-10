@@ -410,6 +410,7 @@ class Main:
                 # stop if we've reached the number of items we need
                 if count == self.LIMIT:
                     break
+            self.WINDOW.setProperty("%s.Count" % (request), str(jsonobject['result']['limits']['total']))
                 
     def _daemon(self):
         # deamon is meant to keep script running at all time
