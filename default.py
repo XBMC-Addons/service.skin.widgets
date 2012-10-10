@@ -418,7 +418,6 @@ class Main:
             xbmc.sleep(500)
             if self.RANDOMITEMS_UPDATE_METHOD == 0:
                 count += 1
-                log('timer count %s' %count)
                 if count == self.RANDOMITEMS_TIME:
                     self._fetch_info_randomitems()
                     count = 0    # reset counter
