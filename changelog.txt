@@ -1,2 +1,5 @@
-v12.0.0
-- Integrate Watchlist and RandomItems into one widget service
+[b]v0.0.2[/b]
+- Add option for randomitems to use the timer or on database update
+
+[b]v0.0.1[/b]
+- Initial version that bring Watchlist and RandomItems in one service script

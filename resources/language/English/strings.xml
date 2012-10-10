@@ -5,4 +5,7 @@
         <string id="32003">Only unplayed</string>
         <string id="32004">Randomize time (minutes)</string>
         <string id="32005">Use season folders</string>
+        <string id="32006">Use timer</string>
+        <string id="32007">After database update</string>
+        <string id="32008">Update method</string>
 </strings>

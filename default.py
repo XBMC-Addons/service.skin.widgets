@@ -72,6 +72,9 @@ class Main:
     def _init_property(self):
         self.WINDOW.setProperty('SkinWidgets_Recommended', '%s' % __addon__.getSetting("recommended_enable"))
         self.WINDOW.setProperty('SkinWidgets_RandomItems', '%s' % __addon__.getSetting("randomitems_enable"))
+        self.RANDOMITEMS_UPDATE_METHOD = int(__addon__.getSetting("randomitems_method"))
+        # convert time to seconds, times 2 for 0,5 second sleep compensation
+        self.RANDOMITEMS_TIME = int(__addon__.getSetting("randomitems_time").rstrip('0').rstrip('.')) * 60 * 2
 
     def _parse_argv( self ):
         try:
@@ -409,14 +412,16 @@ class Main:
                     break
                 
     def _daemon(self):
-        updatetime = int(__addon__.getSetting("randomitems_time").rstrip('0').rstrip('.')) * 60     # tijd in seconden
+        # deamon is meant to keep script running at all time
         count = 0
         while (not xbmc.abortRequested) and self.WINDOW.getProperty('SkinWidgets_Running') == 'true':
-            xbmc.sleep(1000)
-            count += 1
-            if count == updatetime:
-                self._fetch_info_randomitems()
-                count = 0    # reset counter
+            xbmc.sleep(500)
+            if self.RANDOMITEMS_UPDATE_METHOD == 0:
+                count += 1
+                log('timer count %s' %count)
+                if count == self.RANDOMITEMS_TIME:
+                    self._fetch_info_randomitems()
+                    count = 0    # reset counter
             
     def _clear_properties(self, request):
         count = 0
@@ -431,10 +436,22 @@ class Main:
         elif type == 'episode':
             self._fetch_tvshows_recommended('RecommendedEpisode')
         elif type == 'video':
+            #only on db update
             self._fetch_movies('RecommendedMovie')
             self._fetch_tvshows_recommended('RecommendedEpisode')
         elif type == 'album':
             self._fetch_albums('RecommendedAlbum')
+        if self.RANDOMITEMS_UPDATE_METHOD == 1:
+            # update random if db update is selected instead of timer
+            if type == 'video':
+                self._fetch_movies('RandomMovie')
+                self._fetch_tvshows_randomitems('RandomEpisode')
+                self._fetch_musicvideo('RandomMusicVideo')
+            elif type == 'album':
+                self._fetch_albums('RandomAlbum')
+                self._fetch_artist('RandomArtist')
+                self._fetch_song('RandomSong')
+                self._fetch_addon('RandomAddon')
 
 def media_path(path):
     # Check for stacked movies
