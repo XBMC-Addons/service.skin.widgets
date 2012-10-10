@@ -1,0 +1,2 @@
+v12.0.0
+- Integrate Watchlist and RandomItems into one widget service
