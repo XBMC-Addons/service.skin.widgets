@@ -39,7 +39,7 @@ __addonid__      = __addon__.getAddonInfo('id')
 __addonname__    = __addon__.getAddonInfo('name')
 
 def log(txt):
-    message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
+    message = '%s: %s' % (__addonname__, unicode(txt, errors='ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
 class Main:
