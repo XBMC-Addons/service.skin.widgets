@@ -1,3 +1,6 @@
+[b]v0.0.3[/b]
+- Fix wrong recommeded movies JSON-RPC request
+
 [b]v0.0.2[/b]
 - Add option for randomitems to use the timer or on database update
 

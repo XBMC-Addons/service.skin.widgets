@@ -130,7 +130,7 @@ class Main:
            
     def _fetch_movies(self, request):
         if request == 'RecommendedMovie':
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "fanart", "thumbnail", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume"], "sort": { "order": "descending", "method": "lastplayed" }, "limits": {"end": %d}}, "id": 1}, "filter": {"field": "inprogress", "operator": "true", "value": ""}' %self.LIMIT)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "fanart", "thumbnail", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume"], "sort": {"order": "descending", "method": "lastplayed"}, "limits": {"end": %d}, "filter": {"field": "inprogress", "operator": "true", "value": ""}}, "id": 1}' %self.LIMIT)
         elif self.RANDOMITEMS_UNPLAYED:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "fanart", "thumbnail", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume"], "sort": {"method": "random" }, "limits": {"end": %d} }, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}, "id": 1}' %self.LIMIT)
         else:
