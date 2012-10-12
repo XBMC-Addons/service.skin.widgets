@@ -27,6 +27,7 @@ import xbmcaddon
 import random
 import datetime
 import _strptime
+import urllib
 
 if sys.version_info < (2, 7):
     import simplejson
