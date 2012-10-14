@@ -73,6 +73,7 @@ class Main:
     def _init_property(self):
         self.WINDOW.setProperty('SkinWidgets_Recommended', '%s' % __addon__.getSetting("recommended_enable"))
         self.WINDOW.setProperty('SkinWidgets_RandomItems', '%s' % __addon__.getSetting("randomitems_enable"))
+        self.WINDOW.setProperty('SkinWidgets_RandomItems_Update', 'false')
         self.RANDOMITEMS_UPDATE_METHOD = int(__addon__.getSetting("randomitems_method"))
         # convert time to seconds, times 2 for 0,5 second sleep compensation
         self.RANDOMITEMS_TIME = int(__addon__.getSetting("randomitems_time").rstrip('0').rstrip('.')) * 60 * 2
@@ -423,6 +424,11 @@ class Main:
                 if count == self.RANDOMITEMS_TIME:
                     self._fetch_info_randomitems()
                     count = 0    # reset counter
+            if self.WINDOW.getProperty('SkinWidgets_RandomItems_Update') == 'true':
+                count = 0
+                self.WINDOW.setProperty('SkinWidgets_RandomItems_Update','false')
+                self._fetch_info_randomitems()
+                
             
     def _clear_properties(self, request):
         count = 0
