@@ -1,3 +1,8 @@
+[b]v0.0.4[/b]
+- Fix missing import
+- Fix typo in clearproperty
+- Add SetProperty(SkinWidgets_RandomItems_Update,true) to trigger update on all randomitems
+
 [b]v0.0.3[/b]
 - Fix wrong recommeded movies JSON-RPC request
 
