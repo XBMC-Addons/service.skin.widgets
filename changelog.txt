@@ -1,13 +1,16 @@
-[b]v0.0.4[/b]
+v0.0.5
+- Add missing trailer property
+
+v0.0.4
 - Fix missing import
 - Fix typo in clearproperty
 - Add SetProperty(SkinWidgets_RandomItems_Update,true) to trigger update on all randomitems
 
-[b]v0.0.3[/b]
+v0.0.3
 - Fix wrong recommeded movies JSON-RPC request
 
-[b]v0.0.2[/b]
+v0.0.2
 - Add option for randomitems to use the timer or on database update
 
-[b]v0.0.1[/b]
+v0.0.1
 - Initial version that bring Watchlist and RandomItems in one service script
