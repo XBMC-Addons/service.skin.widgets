@@ -428,7 +428,7 @@ class Main:
         count = 0
         for count in range(int(self.LIMIT)):
             count += 1
-            self.WINDOW.clearProperty("%s.%d.Titel" % (request, count))
+            self.WINDOW.clearProperty("%s.%d.Title" % (request, count))
 
     def _update(self, type):
         xbmc.sleep(500)
