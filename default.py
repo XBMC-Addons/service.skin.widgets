@@ -168,7 +168,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
                 self.WINDOW.setProperty("%s.%d.Disc"        % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png')))
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Percentage"  % (request, count), percentage)
+                self.WINDOW.setProperty("%s.%d.Played"      % (request, count), percentage)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
 
@@ -214,8 +214,8 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), item['studio'][0])
                 self.WINDOW.setProperty("%s.%d.TvshowThumb" % (request, count), item['thumbnail'])
                 self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
-                self.WINDOW.setProperty("%s.%d.IsResumable" % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Percentage"  % (request, count), percentage)
+                self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
+                self.WINDOW.setProperty("%s.%d.Played"      % (request, count), percentage)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item2['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
 
@@ -275,7 +275,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.TVShowThumb" % (request, count), item['thumbnail'])
                 self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Percentage"  % (request, count), percentage)
+                self.WINDOW.setProperty("%s.%d.Played"      % (request, count), percentage)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
 
