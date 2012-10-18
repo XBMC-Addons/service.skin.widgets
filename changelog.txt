@@ -1,3 +1,6 @@
+v0.0.6
+- Fixes calling recent episode multiple times
+
 v0.0.5
 - Add missing trailer property
 - Fixed some wrong labels
