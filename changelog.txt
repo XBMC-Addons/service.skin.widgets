@@ -1,5 +1,7 @@
 v0.0.5
 - Add missing trailer property
+- Fixed some wrong labels
+- Added Recent Items
 
 v0.0.4
 - Fix missing import
