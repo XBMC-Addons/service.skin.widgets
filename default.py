@@ -115,7 +115,7 @@ class Main:
 
     def _fetch_info_recentitems(self):
         a = datetime.datetime.now()
-        if __addon__.getSetting("recentlyadded_enable") == 'true':
+        if __addon__.getSetting("recentitems_enable") == 'true':
             self.RECENTITEMS_UNPLAYED = __addon__.getSetting("recentitems_unplayed") == 'true'
             self._fetch_movies('RecentMovie')
             self._fetch_tvshows('RecentEpisode')
@@ -123,7 +123,7 @@ class Main:
             self._fetch_albums('RecentAlbum')
             b = datetime.datetime.now()
             c = b - a
-            log('Total time needed to request RecentlyAdded queries: %s' % c)
+            log('Total time needed to request recent items queries: %s' % c)
             
     def _fetch_movies(self, request):
         if request == 'RecommendedMovie':
@@ -297,8 +297,6 @@ class Main:
     def _fetch_musicvideo(self, request):
         if request == 'RandomMusicVideo':
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file"], "sort": {"order": "descending", "method": "playcount" }, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
-        #elif request == 'RandomMusicVideo' and self.RANDOMITEMS_UNPLAYED:
-        #    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file"], "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}, "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
         elif request == 'RecentMusicVideo':
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file"], "sort": {"order": "descending", "method": "dateadded"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
         else:
