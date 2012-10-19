@@ -463,8 +463,10 @@ class Main:
         xbmc.sleep(500)
         if type == 'movie':
             self._fetch_movies('RecommendedMovie')
+            self._fetch_movies('RecentMovie')
         elif type == 'episode':
             self._fetch_tvshows_recommended('RecommendedEpisode')
+            self._fetch_tvshows('RecentEpisode')
         elif type == 'video':
             #only on db update
             self._fetch_movies('RecommendedMovie')
