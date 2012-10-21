@@ -11,7 +11,7 @@
         <setting label="32004" type="slider" id="randomitems_time" subsetting="true" enable="eq(-1,0)" default="10" range="5,5,60"  option="int"/>
     </category>
     <category label="32009">
-        <setting label="32002" type="bool" id="recentitems_enable" default="true"/>
+        <setting label="32009" type="bool" id="recentitems_enable" default="true"/>
         <setting label="32003" type="bool" id="recentitems_unplayed" subsetting="true" default="true" enable="eq(-1,true)"/>
     </category>
 </settings>
