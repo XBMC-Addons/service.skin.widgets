@@ -126,7 +126,7 @@ class Main:
             log('Total time needed to request recent items queries: %s' % c)
             
     def _fetch_movies(self, request):
-        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMovies", "params": {"properties": ["dateadded", "title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "fanart", "thumbnail", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume"], "limits": {"end": %d},' %self.LIMIT
+        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedMovie':
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}}}' %json_string)
         elif request == 'RecentMovie' and self.RECENTITEMS_UNPLAYED:
@@ -150,6 +150,12 @@ class Main:
                 else:
                     resume = "false"
                     played = '0%'
+                # back compatibility
+                art = item['art']
+                if art.get('poster'):
+                    poster = art.get('poster')
+                else:
+                    poster = art.get('thumb','')
                 path = media_path(item['file'])
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
@@ -161,8 +167,8 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Runtime"     % (request, count), item['runtime'])
                 self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), str(round(float(item['rating']),1)))
                 self.WINDOW.setProperty("%s.%d.Trailer"     % (request, count), item['trailer'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), art.get('fanart',''))
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), poster)
                 self.WINDOW.setProperty("%s.%d.Logo"        % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
                 self.WINDOW.setProperty("%s.%d.Landscape"   % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
                 self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
@@ -174,7 +180,7 @@ class Main:
 
     def _fetch_tvshows_recommended(self, request):
         # First unplayed episode of recent played tvshows
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "thumbnail", "file"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if json_response['result'].has_key('tvshows'):
@@ -182,7 +188,7 @@ class Main:
             count = 0
             for item in json_response['result']['tvshows']:
                 count += 1
-                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": %d, "properties": ["title", "playcount", "plot", "season", "episode", "showtitle", "thumbnail", "fanart", "file", "lastplayed", "rating", "resume"], "sort": {"method": "episode"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}, "limits": {"end": 1}}, "id": 1}' %item['tvshowid'])
+                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": %d, "properties": ["title", "playcount", "plot", "season", "episode", "showtitle", "file", "lastplayed", "rating", "resume", "art"], "sort": {"method": "episode"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}, "limits": {"end": 1}}, "id": 1}' %item['tvshowid'])
                 json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
                 json_response2 = simplejson.loads(json_query2)
                 if json_response2.has_key('result') and json_response2['result'] != None and json_response2['result'].has_key('episodes'):
@@ -191,14 +197,25 @@ class Main:
                         season = "%.2d" % float(item2['season'])
                         rating = str(round(float(item2['rating']),1))
                         episodeno = "s%se%s" %(season,episode)
-                seasonthumb = ''
+                        art2 = item2['art']
+                art = item['art']
+                #seasonthumb = ''
                 if item2['resume']['position'] > 0:
                     resume = "true"
                     played = '%s%%'%int((float(item2['resume']['position']) / float(item2['resume']['total'])) * 100)
                 else:
                     resume = "false"
                     played = '0%'
+                # back compatibility
                 path = media_path(item['file'])
+                if art.get('poster'):
+                    poster = art.get('poster')
+                else:
+                    poster = xbmc.validatePath(os.path.join(path, 'poster.jpg'))
+                if art.get('banner'):
+                    banner = art.get('banner')
+                else:
+                    banner = xbmc.validatePath(os.path.join(path, 'banner.jpg'))
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item2['title'])
                 self.WINDOW.setProperty("%s.%d.Episode"     % (request, count), episode)
                 self.WINDOW.setProperty("%s.%d.EpisodeNo"   % (request, count), episodeno)
@@ -206,15 +223,14 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Plot"        % (request, count), item2['plot'])
                 self.WINDOW.setProperty("%s.%d.TVshowTitle" % (request, count), item2['showtitle'])
                 self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), rating)
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item2['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item2['fanart'])
-                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), xbmc.validatePath(os.path.join(path, 'poster.jpg')))
-                self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.jpg')))
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), art2.get('thumb',''))
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), art2.get('fanart',''))
+                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), banner)
                 self.WINDOW.setProperty("%s.%d.Logo"        % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
                 self.WINDOW.setProperty("%s.%d.Clearart"    % (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png')))
                 self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), item['studio'][0])
-                self.WINDOW.setProperty("%s.%d.TvshowThumb" % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
+                #self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
                 self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item2['file'])
@@ -222,7 +238,7 @@ class Main:
 
     def _fetch_tvshows(self, request):
         season_folders = __addon__.getSetting("randomitems_seasonfolders")
-        json_string = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetEpisodes", "params": { "properties": ["title", "playcount", "season", "episode", "showtitle", "plot", "fanart", "thumbnail", "file", "rating", "resume", "tvshowid"], "limits": {"end": %d},' %self.LIMIT
+        json_string = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetEpisodes", "params": { "properties": ["title", "playcount", "season", "episode", "showtitle", "plot", "file", "rating", "resume", "tvshowid", "art"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecentEpisode' and self.RECENTITEMS_UNPLAYED:
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json_string)
         elif request == 'RecentEpisode':
@@ -254,7 +270,7 @@ class Main:
                 episode = ("%.2d" % float(item['episode']))
                 season = "%.2d" % float(item['season'])
                 episodeno = "s%se%s" %(season,episode)
-                seasonthumb = ''
+                #seasonthumb = ''
                 rating = str(round(float(item['rating']),1))
                 if item['resume']['position'] > 0:
                     resume = "true"
@@ -262,6 +278,15 @@ class Main:
                 else:
                     resume = "false"
                     played = '0%'
+                art = item['art']
+                if art.get('tvshowthumb'):
+                    poster = art.get('tvshowthumb')
+                else:
+                    poster = xbmc.validatePath(os.path.join(path, 'poster.jpg'))
+                if art.get('banner'):
+                    banner = art.get('banner')
+                else:
+                    banner = xbmc.validatePath(os.path.join(path, 'banner.jpg'))
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Episode"     % (request, count), episode)
                 self.WINDOW.setProperty("%s.%d.EpisodeNo"   % (request, count), episodeno)
@@ -269,16 +294,15 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Plot"        % (request, count), item['plot'])
                 self.WINDOW.setProperty("%s.%d.TVshowTitle" % (request, count), item['showtitle'])
                 self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), rating)
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), xbmc.validatePath(os.path.join(path, 'poster.jpg')))
-                self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.jpg')))
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), art.get('thumb',''))
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), art.get('fanart',''))
+                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), banner)
                 self.WINDOW.setProperty("%s.%d.Logo"        % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
                 self.WINDOW.setProperty("%s.%d.Clearart"    % (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png')))
                 # Requires extra JSON-RPC request, see commented out part
                 #self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), studio)
-                self.WINDOW.setProperty("%s.%d.TVShowThumb" % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
+                #self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
                 self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
