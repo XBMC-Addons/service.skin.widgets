@@ -255,7 +255,6 @@ class Main:
                 season = "%.2d" % float(item['season'])
                 episodeno = "s%se%s" %(season,episode)
                 seasonthumb = ''
-                resumable = "True"
                 rating = str(round(float(item['rating']),1))
                 if item['resume']['position'] > 0:
                     resume = "true"
