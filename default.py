@@ -128,15 +128,15 @@ class Main:
     def _fetch_movies(self, request):
         json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMovies", "params": {"properties": ["dateadded", "title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "fanart", "thumbnail", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedMovie':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}}}' %json_string)
         elif request == 'RecentMovie' and self.RECENTITEMS_UNPLAYED:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}}}' %json_string)
         elif request == 'RecentMovie':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}' %json_string)
         elif request == "RandomMovie" and self.RANDOMITEMS_UNPLAYED:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json_string)
         else:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" } }}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" } }}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if json_response['result'].has_key('movies'):
@@ -224,13 +224,13 @@ class Main:
         season_folders = __addon__.getSetting("randomitems_seasonfolders")
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetEpisodes", "params": { "properties": ["title", "playcount", "season", "episode", "showtitle", "plot", "fanart", "thumbnail", "file", "rating", "resume", "tvshowid"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecentEpisode' and self.RECENTITEMS_UNPLAYED:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json_string)
         elif request == 'RecentEpisode':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}' %json_string)
         elif request == 'RandomEpisode' and self.RANDOMITEMS_UNPLAYED:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json_string)
         else:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }}}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if json_response['result'].has_key('episodes'):
@@ -299,11 +299,11 @@ class Main:
     def _fetch_musicvideo(self, request):
         json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file"],  "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedMusicVideo':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}'  %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}'  %json_string)
         elif request == 'RecentMusicVideo':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}'  %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}}}'  %json_string)
         else:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if json_response['result'].has_key('musicvideos'):
@@ -326,11 +326,11 @@ class Main:
     def _fetch_albums(self, request):
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedAlbum':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}' %json_string)
         elif request == 'RecentAlbum':
-            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded" }}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded" }}}' %json_string)
         else:
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
         json_response = unicode(json_query, 'utf-8', errors='ignore')
         jsonobject = simplejson.loads(json_response)
         if jsonobject['result'].has_key('albums'):
@@ -375,9 +375,9 @@ class Main:
     def _fetch_song(self, request):
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "playcount", "artist", "album", "year", "file", "thumbnail", "fanart", "rating"], "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}, "limits": {"end": %d},' %self.LIMIT
         if request == 'RandomSong' and self.RANDOMITEMS_UNPLAYED == "True":
-            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}'  %json)
+            json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}'  %json_string)
         else:
-            json_query = xbmc.executeJSONRPC('%s  "sort": {"method": "random"}}}'  %json)
+            json_query = xbmc.executeJSONRPC('%s  "sort": {"method": "random"}}}'  %json_string)
         json_response = unicode(json_query, 'utf-8', errors='ignore')
         jsonobject = simplejson.loads(json_response)
         if jsonobject['result'].has_key('songs'):
