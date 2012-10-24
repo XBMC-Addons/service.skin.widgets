@@ -126,7 +126,7 @@ class Main:
             log('Total time needed to request recent items queries: %s' % c)
             
     def _fetch_movies(self, request):
-        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art"], "limits": {"end": %d},' %self.LIMIT
+        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMovies", "params": {"properties": ["title", "playcount", "year", "genre", "studio", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails"], "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedMovie':
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}}}' %json_string)
         elif request == 'RecentMovie' and self.RECENTITEMS_UNPLAYED:
@@ -156,6 +156,8 @@ class Main:
                     poster = art.get('poster')
                 else:
                     poster = art.get('thumb','')
+                resolution = media_resolution(item['file'].encode('utf-8').lower(),
+                                              item['streamdetails']['video'])
                 path = media_path(item['file'])
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
@@ -177,6 +179,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Resolution"  % (request, count), resolution)
 
     def _fetch_tvshows_recommended(self, request):
         # First unplayed episode of recent played tvshows
@@ -517,7 +520,29 @@ def media_path(path):
     else:
         path = [path]
     return path[0]
-            
+
+def media_resolution(filename, streamdetails):
+    if '3d' in filename:
+        resolution = '3d'
+    elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
+        resolution = '576'
+    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
+        resolution = '1080'
+    elif streamdetails:
+        videowidth = streamdetails[0]['width']
+        videoheight = streamdetails[0]['height']
+        if videoheight > 720:
+            resolution = '1080'
+        elif videoheight <= 720 and videoheight >= 576:
+            resolution = '720'
+        elif videoheight <= 576 and videoheight >= 480:
+            resolution = '576'
+        else:
+            resolution = '480'
+    else:
+        resolution = '1080'
+    return resolution
+    
 class MyMonitor(xbmc.Monitor):
     def __init__(self, *args, **kwargs):
         xbmc.Monitor.__init__(self)
