@@ -1,3 +1,7 @@
+v0.0.7
+- Prefer new database 'Art' field over old 'thumb' and use local files as backup
+- Add Resolution label for movies
+
 v0.0.6
 - Fixes calling recent episode multiple times
 
