@@ -536,11 +536,11 @@ def media_resolution(filename, streamdetails):
     elif streamdetails:
         videowidth = streamdetails[0]['width']
         videoheight = streamdetails[0]['height']
-        if videoheight > 720:
+        if videowidth > 720:
             resolution = '1080'
-        elif videoheight <= 720 and videoheight >= 576:
+        elif videowidth <= 720 and videowidth >= 576:
             resolution = '720'
-        elif videoheight <= 576 and videoheight >= 480:
+        elif videowidth <= 576 and videowidth >= 480:
             resolution = '576'
         else:
             resolution = '480'
