@@ -150,6 +150,10 @@ class Main:
                 else:
                     resume = "false"
                     played = '0%'
+                if item['playcount'] >= 1:
+                    watched = "true"
+                else:
+                    watched = "false"
                 # back compatibility
                 art = item['art']
                 if art.get('poster'):
@@ -177,6 +181,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Disc"        % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png')))
                 self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
                 self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
+                self.WINDOW.setProperty("%s.%d.Watched"     % (request, count), watched)
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
                 self.WINDOW.setProperty("%s.%d.Resolution"  % (request, count), resolution)
