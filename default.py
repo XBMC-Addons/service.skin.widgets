@@ -154,37 +154,49 @@ class Main:
                     watched = "true"
                 else:
                     watched = "false"
-                # back compatibility
+                # back compatibility can be removed at some point and just use art.get('poster') directly in label
                 art = item['art']
                 if art.get('poster'):
                     poster = art.get('poster')
                 else:
                     poster = art.get('thumb','')
-                resolution = media_resolution(item['file'].encode('utf-8').lower(),
-                                              item['streamdetails']['video'])
+                streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
+                                           item['streamdetails'])
                 path = media_path(item['file'])
-                self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
-                self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
-                self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
-                self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), item['studio'][0])
-                self.WINDOW.setProperty("%s.%d.Plot"        % (request, count), item['plot'])
-                self.WINDOW.setProperty("%s.%d.PlotOutline" % (request, count), item['plotoutline'])
-                self.WINDOW.setProperty("%s.%d.Tagline"     % (request, count), item['tagline'])
-                self.WINDOW.setProperty("%s.%d.Runtime"     % (request, count), item['runtime'])
-                self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), str(round(float(item['rating']),1)))
-                self.WINDOW.setProperty("%s.%d.Trailer"     % (request, count), item['trailer'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), art.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), poster)
-                self.WINDOW.setProperty("%s.%d.Logo"        % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
-                self.WINDOW.setProperty("%s.%d.Landscape"   % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
-                self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
-                self.WINDOW.setProperty("%s.%d.Disc"        % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png')))
-                self.WINDOW.setProperty("%s.%d.Resume"      % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Played"      % (request, count), played)
-                self.WINDOW.setProperty("%s.%d.Watched"     % (request, count), watched)
-                self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
-                self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
-                self.WINDOW.setProperty("%s.%d.Resolution"  % (request, count), resolution)
+                self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
+                self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
+                self.WINDOW.setProperty("%s.%d.Genre"           % (request, count), " / ".join(item['genre']))
+                self.WINDOW.setProperty("%s.%d.Studio"          % (request, count), item['studio'][0])
+                self.WINDOW.setProperty("%s.%d.Plot"            % (request, count), item['plot'])
+                self.WINDOW.setProperty("%s.%d.PlotOutline"     % (request, count), item['plotoutline'])
+                self.WINDOW.setProperty("%s.%d.Tagline"         % (request, count), item['tagline'])
+                self.WINDOW.setProperty("%s.%d.Runtime"         % (request, count), item['runtime'])
+                self.WINDOW.setProperty("%s.%d.Rating"          % (request, count), str(round(float(item['rating']),1)))
+                self.WINDOW.setProperty("%s.%d.Trailer"         % (request, count), item['trailer'])
+                self.WINDOW.setProperty("%s.%d.Fanart"          % (request, count), art.get('fanart',''))
+                self.WINDOW.setProperty("%s.%d.Thumb"           % (request, count), poster) #remove
+                self.WINDOW.setProperty("%s.%d.Poster"          % (request, count), poster) #remove
+                self.WINDOW.setProperty("%s.%d.Logo"            % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png'))) #remove
+                self.WINDOW.setProperty("%s.%d.Landscape"       % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png'))) #remove
+                self.WINDOW.setProperty("%s.%d.Banner"          % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png'))) #remove
+                self.WINDOW.setProperty("%s.%d.Disc"            % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png'))) #remove
+                self.WINDOW.setProperty("%s.%d.Art(poster)"     % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Art(logo)"       % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
+                self.WINDOW.setProperty("%s.%d.Art(landscape)"  % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
+                self.WINDOW.setProperty("%s.%d.Art(banner)"     % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
+                self.WINDOW.setProperty("%s.%d.Art(disc)"       % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png')))                
+                self.WINDOW.setProperty("%s.%d.Resume"          % (request, count), resume)
+                self.WINDOW.setProperty("%s.%d.Played"          % (request, count), played) # remove this one. use PercentPlayed
+                self.WINDOW.setProperty("%s.%d.PercentPlayed"   % (request, count), played)
+                self.WINDOW.setProperty("%s.%d.Watched"         % (request, count), watched)
+                self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
+                self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Resolution"      % (request, count), streaminfo['videoresolution']) # remove this one. use VideoResolution
+                self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
+                self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
+                self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
+                self.WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
+                self.WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
 
     def _fetch_tvshows_recommended(self, request):
         # First unplayed episode of recent played tvshows
@@ -526,27 +538,59 @@ def media_path(path):
         path = [path]
     return path[0]
 
-def media_resolution(filename, streamdetails):
+def media_streamdetails(filename, streamdetails):
+    info = {}
+    video = streamdetails['video']
+    audio = streamdetails['audio']
+    print audio
+    print video
     if '3d' in filename:
-        resolution = '3d'
-    elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
-        resolution = '576'
-    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
-        resolution = '1080'
-    elif streamdetails:
-        videowidth = streamdetails[0]['width']
-        videoheight = streamdetails[0]['height']
-        if videowidth > 720:
-            resolution = '1080'
-        elif videowidth <= 720 and videowidth >= 576:
-            resolution = '720'
-        elif videowidth <= 576 and videowidth >= 480:
-            resolution = '576'
+        info['videoresolution'] = '3d'
+    elif video:
+        videowidth = video[0]['width']
+        videoheight = video[0]['height']
+        if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
+            info['videoresolution'] = "480"
+        elif (video[0]['width'] <= 768 and video[0]['height'] <= 576):
+            info['videoresolution'] = "576"
+        elif (video[0]['width'] <= 960 and video[0]['height'] <= 544):
+            info['videoresolution'] = "540"
+        elif (video[0]['width'] <= 1280 and video[0]['height'] <= 720):
+            info['videoresolution'] = "720"
         else:
-            resolution = '480'
+            info['videoresolution'] = "1080"
+    elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
+        info['videoresolution'] = '576'
+    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
+        info['videoresolution'] = '1080'
     else:
-        resolution = '1080'
-    return resolution
+        info['videoresolution'] = '1080'
+    if video:
+        info['videocodec'] = video[0]['codec']
+        if (video[0]['aspect'] < 1.4859):
+            info['videoaspect'] = "1.33"
+        elif (video[0]['aspect'] < 1.7190):
+            info['videoaspect'] = "1.66"
+        elif (video[0]['aspect'] < 1.8147):
+            info['videoaspect'] = "1.78"
+        elif (video[0]['aspect'] < 2.0174):
+            info['videoaspect'] = "1.85"
+        elif (video[0]['aspect'] < 2.2738):
+            info['videoaspect'] = "2.20"
+        else:
+            info['videoaspect'] = "2.35"
+    else:
+        info['videocodec'] = ''
+        info['videoaspect'] = ''
+    if audio:
+        info['audiocodec'] = audio[0]['codec']
+        info['audiochannels'] = audio[0]['channels']
+    else:
+        info['audiocodec'] = ''
+        info['audiochannels'] = ''
+    print info
+    return info
+
     
 class MyMonitor(xbmc.Monitor):
     def __init__(self, *args, **kwargs):
