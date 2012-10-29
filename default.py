@@ -170,7 +170,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), str(round(float(item['rating']),1)))
                 self.WINDOW.setProperty("%s.%d.Trailer"     % (request, count), item['trailer'])
                 self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), art.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Poster"      % (request, count), poster)
                 self.WINDOW.setProperty("%s.%d.Logo"        % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
                 self.WINDOW.setProperty("%s.%d.Landscape"   % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
                 self.WINDOW.setProperty("%s.%d.Banner"      % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
