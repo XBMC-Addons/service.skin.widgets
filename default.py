@@ -181,6 +181,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Banner"          % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png'))) #remove
                 self.WINDOW.setProperty("%s.%d.Disc"            % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png'))) #remove
                 self.WINDOW.setProperty("%s.%d.Art(poster)"     % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Art(fanart)"     % (request, count), art.get('fanart',''))
                 self.WINDOW.setProperty("%s.%d.Art(logo)"       % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
                 self.WINDOW.setProperty("%s.%d.Art(landscape)"  % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
                 self.WINDOW.setProperty("%s.%d.Art(banner)"     % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))

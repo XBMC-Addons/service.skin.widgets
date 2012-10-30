@@ -1,4 +1,4 @@
-v0.0.8
+v0.0.9
 - Added streamdetails for all video related items
 - use foo.Art(bar) for artwork related
 
