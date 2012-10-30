@@ -383,8 +383,10 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Plot"        % (request, count), item['plot'])
                 self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
                 self.WINDOW.setProperty("%s.%d.Runtime"     % (request, count), item['runtime'])
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart'])
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
 
@@ -415,8 +417,10 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.RecordLabel" % (request, count), item['albumlabel'])
                 self.WINDOW.setProperty("%s.%d.Description" % (request, count), item['description'])
                 self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), rating)
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart'])
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.Play"        % (request, count), path)
 
     def _fetch_artist(self, request):
@@ -432,8 +436,10 @@ class Main:
                 path = 'musicdb://2/' + str(item['artistid']) + '/'
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['label'])
                 self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.Description" % (request, count), item['description'])
                 self.WINDOW.setProperty("%s.%d.LibraryPath" % (request, count), path)
 
@@ -451,15 +457,17 @@ class Main:
             for item in jsonobject['result']['songs']:
                 count += 1
                 path = media_path(item['file'])
-                self.WINDOW.setProperty("%s.%d.Title"  % (request, count), item['title'])
-                self.WINDOW.setProperty("%s.%d.Artist" % (request, count), " / ".join(item['artist']))
-                self.WINDOW.setProperty("%s.%d.Year"   % (request, count), str(item['year']))
-                self.WINDOW.setProperty("%s.%d.Rating" % (request, count), str(int(item['rating'])-48))
-                self.WINDOW.setProperty("%s.%d.Album"  % (request, count), item['album'])
-                self.WINDOW.setProperty("%s.%d.Thumb"  % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Fanart" % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.File"   % (request, count), item['file'])
-                self.WINDOW.setProperty("%s.%d.Path"   % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
+                self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
+                self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
+                self.WINDOW.setProperty("%s.%d.Rating"      % (request, count), str(int(item['rating'])-48))
+                self.WINDOW.setProperty("%s.%d.Album"       % (request, count), item['album'])
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
+                self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
+                self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
 
     def _fetch_addon(self, request):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"properties": ["name", "author", "summary", "version", "fanart", "thumbnail"]}, "id": 1}')
@@ -477,14 +485,16 @@ class Main:
             count = 0
             for item in addonlist:
                 count += 1
-                self.WINDOW.setProperty("%s.%d.Title"   % (request, count), item['name'])
-                self.WINDOW.setProperty("%s.%d.Author"  % (request, count), item['author'])
-                self.WINDOW.setProperty("%s.%d.Summary" % (request, count), item['summary'])
-                self.WINDOW.setProperty("%s.%d.Version" % (request, count), item['version'])
-                self.WINDOW.setProperty("%s.%d.Path"    % (request, count), item['addonid'])
-                self.WINDOW.setProperty("%s.%d.Fanart"  % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.Thumb"   % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Type"    % (request, count), item['type'])
+                self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['name'])
+                self.WINDOW.setProperty("%s.%d.Author"      % (request, count), item['author'])
+                self.WINDOW.setProperty("%s.%d.Summary"     % (request, count), item['summary'])
+                self.WINDOW.setProperty("%s.%d.Version"     % (request, count), item['version'])
+                self.WINDOW.setProperty("%s.%d.Path"        % (request, count), item['addonid'])
+                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
+                self.WINDOW.setProperty("%s.%d.Type"        % (request, count), item['type'])
                 # stop if we've reached the number of items we need
                 if count == self.LIMIT:
                     break
