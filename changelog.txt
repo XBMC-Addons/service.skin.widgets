@@ -1,3 +1,7 @@
+v0.0.8
+- Added streamdetails for all video related items
+- use foo.Art(bar) for artwork related
+
 v0.0.7
 - Prefer new database 'Art' field over old 'thumb' and use local files as backup
 - Add Resolution label for movies
