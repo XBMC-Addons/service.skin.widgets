@@ -362,7 +362,7 @@ class Main:
                     return thumbnail
 
     def _fetch_musicvideo(self, request):
-        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file"],  "limits": {"end": %d},' %self.LIMIT
+        json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file", "streamdetails"],  "limits": {"end": %d},' %self.LIMIT
         if request == 'RecommendedMusicVideo':
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}'  %json_string)
         elif request == 'RecentMusicVideo':
@@ -376,19 +376,26 @@ class Main:
             count = 0
             for item in json_response['result']['musicvideos']:
                 count += 1
+                streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
+                                                 item['streamdetails'])
                 path = media_path(item['file'])
-                self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
-                self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
-                self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
-                self.WINDOW.setProperty("%s.%d.Plot"        % (request, count), item['plot'])
-                self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
-                self.WINDOW.setProperty("%s.%d.Runtime"     % (request, count), item['runtime'])
-                self.WINDOW.setProperty("%s.%d.Thumb"       % (request, count), item['thumbnail']) #remove
-                self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
-                self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
-                self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
-                self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
+                self.WINDOW.setProperty("%s.%d.Artist"          % (request, count), " / ".join(item['artist']))
+                self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
+                self.WINDOW.setProperty("%s.%d.Plot"            % (request, count), item['plot'])
+                self.WINDOW.setProperty("%s.%d.Genre"           % (request, count), " / ".join(item['genre']))
+                self.WINDOW.setProperty("%s.%d.Runtime"         % (request, count), item['runtime'])
+                self.WINDOW.setProperty("%s.%d.Thumb"           % (request, count), item['thumbnail']) #remove
+                self.WINDOW.setProperty("%s.%d.Fanart"          % (request, count), item['fanart']) #remove
+                self.WINDOW.setProperty("%s.%d.Art(thumb)"      % (request, count), item['thumbnail'])
+                self.WINDOW.setProperty("%s.%d.Art(fanart)"     % (request, count), item['fanart'])
+                self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
+                self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
+                self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
+                self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
+                self.WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
+                self.WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
 
     def _fetch_albums(self, request):
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"], "limits": {"end": %d},' %self.LIMIT
