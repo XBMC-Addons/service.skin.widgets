@@ -1,3 +1,8 @@
+v0.0.10
+- Drop old artwork labels for tvshows and movies
+- Add update label for recent items
+- Add non native artwork support. Needs Artwork Downloader 12.0.2 or up
+
 v0.0.9
 - Added streamdetails for all video related items
 - use foo.Art(bar) for artwork related
