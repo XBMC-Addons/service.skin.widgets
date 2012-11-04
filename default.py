@@ -228,7 +228,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Art(thumb)"          % (request, count), art2.get('thumb',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.fanart)"  % (request, count), art2.get('fanart',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.poster)"  % (request, count), art2.get('tvshow.poster',''))
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), art2.get('tvshow.banner'))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), art2.get('tvshow.banner',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.clearlogo)"% (request, count), art.get('clearlogo',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.clearart)" % (request, count), art.get('clearart',''))
                 #self.WINDOW.setProperty("%s.%d.Art(season.poster)" % (request, count), seasonthumb)
