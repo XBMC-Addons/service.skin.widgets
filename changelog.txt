@@ -1,3 +1,6 @@
+v0.0.11
+- Add missng landscape for tvshows
+
 v0.0.10
 - Drop old artwork labels for tvshows and movies
 - Add update label for recent items
