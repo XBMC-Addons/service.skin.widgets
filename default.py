@@ -155,15 +155,10 @@ class Main:
                     watched = "true"
                 else:
                     watched = "false"
-                # back compatibility can be removed at some point and just use art.get('poster') directly in label
                 art = item['art']
-                if art.get('poster'):
-                    poster = art.get('poster')
-                else:
-                    poster = art.get('thumb','')
+                path = media_path(item['file'])
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                            item['streamdetails'])
-                path = media_path(item['file'])
                 self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
                 self.WINDOW.setProperty("%s.%d.Genre"           % (request, count), " / ".join(item['genre']))
@@ -174,26 +169,18 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Runtime"         % (request, count), item['runtime'])
                 self.WINDOW.setProperty("%s.%d.Rating"          % (request, count), str(round(float(item['rating']),1)))
                 self.WINDOW.setProperty("%s.%d.Trailer"         % (request, count), item['trailer'])
-                self.WINDOW.setProperty("%s.%d.Fanart"          % (request, count), art.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Thumb"           % (request, count), poster) #remove
-                self.WINDOW.setProperty("%s.%d.Poster"          % (request, count), poster) #remove
-                self.WINDOW.setProperty("%s.%d.Logo"            % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Landscape"       % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Banner"          % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Disc"            % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Art(poster)"     % (request, count), poster)
+                self.WINDOW.setProperty("%s.%d.Art(poster)"     % (request, count), art.get('poster',''))
                 self.WINDOW.setProperty("%s.%d.Art(fanart)"     % (request, count), art.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Art(logo)"       % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
-                self.WINDOW.setProperty("%s.%d.Art(landscape)"  % (request, count), xbmc.validatePath(os.path.join(path, 'landscape.png')))
-                self.WINDOW.setProperty("%s.%d.Art(banner)"     % (request, count), xbmc.validatePath(os.path.join(path, 'banner.png')))
-                self.WINDOW.setProperty("%s.%d.Art(disc)"       % (request, count), xbmc.validatePath(os.path.join(path, 'disc.png')))                
+                self.WINDOW.setProperty("%s.%d.Art(clearlogo)"  % (request, count), art.get('clearlogo',''))
+                self.WINDOW.setProperty("%s.%d.Art(clearart)"   % (request, count), art.get('clearart',''))
+                self.WINDOW.setProperty("%s.%d.Art(landscape)"  % (request, count), art.get('landscape',''))
+                self.WINDOW.setProperty("%s.%d.Art(banner)"     % (request, count), art.get('banner',''))
+                self.WINDOW.setProperty("%s.%d.Art(disc)"       % (request, count), art.get('disc',''))                
                 self.WINDOW.setProperty("%s.%d.Resume"          % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Played"          % (request, count), played) # remove this one. use PercentPlayed
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"   % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.Watched"         % (request, count), watched)
                 self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
-                self.WINDOW.setProperty("%s.%d.Resolution"      % (request, count), streaminfo['videoresolution']) # remove this one. use VideoResolution
                 self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
                 self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
                 self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
@@ -220,7 +207,6 @@ class Main:
                         rating = str(round(float(item2['rating']),1))
                         episodeno = "s%se%s" %(season,episode)
                         art2 = item2['art']
-                art = item['art']
                 #seasonthumb = ''
                 if item2['resume']['position'] > 0:
                     resume = "true"
@@ -228,16 +214,8 @@ class Main:
                 else:
                     resume = "false"
                     played = '0%'
-                # back compatibility can be removed at some point and just use art.get('poster') directly in label
+                art = item['art']
                 path = media_path(item['file'])
-                if art.get('poster'):
-                    poster = art.get('poster')
-                else:
-                    poster = xbmc.validatePath(os.path.join(path, 'poster.jpg'))
-                if art.get('banner'):
-                    banner = art.get('banner')
-                else:
-                    banner = xbmc.validatePath(os.path.join(path, 'banner.jpg'))
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                  item2['streamdetails'])
                 self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item2['title'])
@@ -247,22 +225,15 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Plot"                % (request, count), item2['plot'])
                 self.WINDOW.setProperty("%s.%d.TVshowTitle"         % (request, count), item2['showtitle'])
                 self.WINDOW.setProperty("%s.%d.Rating"              % (request, count), rating)
-                self.WINDOW.setProperty("%s.%d.Thumb"               % (request, count), art2.get('thumb','')) #remove
-                self.WINDOW.setProperty("%s.%d.Fanart"              % (request, count), art2.get('fanart','')) #remove
-                self.WINDOW.setProperty("%s.%d.Poster"              % (request, count), poster) #remove
-                self.WINDOW.setProperty("%s.%d.Banner"              % (request, count), banner) #remove
-                self.WINDOW.setProperty("%s.%d.Logo"                % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Clearart"            % (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png'))) #remove
                 self.WINDOW.setProperty("%s.%d.Art(thumb)"          % (request, count), art2.get('thumb',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.fanart)"  % (request, count), art2.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.poster)"  % (request, count), poster)
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), banner)
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.logo)"    % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearart)"% (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png')))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.poster)"  % (request, count), art2.get('tvshow.poster',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), art2.get('tvshow.banner',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearlogo)"% (request, count), art.get('clearlogo',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearart)" % (request, count), art.get('clearart',''))
                 #self.WINDOW.setProperty("%s.%d.Art(season.poster)" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Studio"              % (request, count), item['studio'][0])
                 self.WINDOW.setProperty("%s.%d.Resume"              % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Played"              % (request, count), played) # remove this one. use PercentPlayed
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"       % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"                % (request, count), item2['file'])
                 self.WINDOW.setProperty("%s.%d.Path"                % (request, count), path)
@@ -315,14 +286,9 @@ class Main:
                     resume = "false"
                     played = '0%'
                 art = item['art']
-                if art.get('tvshowthumb'):
-                    poster = art.get('tvshowthumb')
-                else:
-                    poster = xbmc.validatePath(os.path.join(path, 'poster.jpg'))
-                if art.get('banner'):
-                    banner = art.get('banner')
-                else:
-                    banner = xbmc.validatePath(os.path.join(path, 'banner.jpg'))
+                path = media_path(item['file'])
+                streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
+                                                 item['streamdetails'])
                 self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Episode"             % (request, count), episode)
                 self.WINDOW.setProperty("%s.%d.EpisodeNo"           % (request, count), episodeno)
@@ -330,27 +296,25 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Plot"                % (request, count), item['plot'])
                 self.WINDOW.setProperty("%s.%d.TVshowTitle"         % (request, count), item['showtitle'])
                 self.WINDOW.setProperty("%s.%d.Rating"              % (request, count), rating)
-                self.WINDOW.setProperty("%s.%d.Thumb"               % (request, count), art.get('thumb','')) #remove
-                self.WINDOW.setProperty("%s.%d.Fanart"              % (request, count), art.get('fanart','')) #remove
-                self.WINDOW.setProperty("%s.%d.Poster"              % (request, count), poster) #remove
-                self.WINDOW.setProperty("%s.%d.Banner"              % (request, count), banner) #remove
-                self.WINDOW.setProperty("%s.%d.Logo"                % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png'))) #remove
-                self.WINDOW.setProperty("%s.%d.Clearart"            % (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png'))) #remove
                 self.WINDOW.setProperty("%s.%d.Art(thumb)"          % (request, count), art.get('thumb',''))
                 self.WINDOW.setProperty("%s.%d.Art(tvshow.fanart)"  % (request, count), art.get('fanart',''))
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.poster)"  % (request, count), poster)
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), banner)
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.logo)"    % (request, count), xbmc.validatePath(os.path.join(path, 'logo.png')))
-                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearart)"% (request, count), xbmc.validatePath(os.path.join(path, 'clearart.png')))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.poster)"  % (request, count), art.get('tvshow.poster',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.banner)"  % (request, count), art.get('tvshow.banner',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearlogo)"% (request, count), art.get('clearlogo',''))
+                self.WINDOW.setProperty("%s.%d.Art(tvshow.clearart)" % (request, count), art.get('clearart',''))
                 #self.WINDOW.setProperty("%s.%d.Art(season.poster)" % (request, count), seasonthumb)
                 # Requires extra JSON-RPC request, see commented out part
                 #self.WINDOW.setProperty("%s.%d.Studio"      % (request, count), studio)
                 #self.WINDOW.setProperty("%s.%d.SeasonThumb" % (request, count), seasonthumb)
                 self.WINDOW.setProperty("%s.%d.Resume"              % (request, count), resume)
-                self.WINDOW.setProperty("%s.%d.Played"              % (request, count), played) # remove this one. use PercentPlayed
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"       % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"                % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"                % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.VideoCodec"          % (request, count), streaminfo['videocodec'])
+                self.WINDOW.setProperty("%s.%d.VideoResolution"     % (request, count), streaminfo['videoresolution'])
+                self.WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
+                self.WINDOW.setProperty("%s.%d.AudioCodec"          % (request, count), streaminfo['audiocodec'])
+                self.WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
 
     def _fetch_seasonthumb(self, tvshowid, seasonnumber):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetSeasons", "params": {"properties": ["season", "thumbnail"], "tvshowid":%s }, "id": 1}' % tvshowid)
