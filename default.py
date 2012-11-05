@@ -175,7 +175,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Art(clearart)"   % (request, count), art.get('clearart',''))
                 self.WINDOW.setProperty("%s.%d.Art(landscape)"  % (request, count), art.get('landscape',''))
                 self.WINDOW.setProperty("%s.%d.Art(banner)"     % (request, count), art.get('banner',''))
-                self.WINDOW.setProperty("%s.%d.Art(disc)"       % (request, count), art.get('disc',''))                
+                self.WINDOW.setProperty("%s.%d.Art(discart)"    % (request, count), art.get('discart',''))                
                 self.WINDOW.setProperty("%s.%d.Resume"          % (request, count), resume)
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"   % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.Watched"         % (request, count), watched)
