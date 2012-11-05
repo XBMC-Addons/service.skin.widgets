@@ -77,6 +77,7 @@ class Main:
         self.WINDOW.setProperty('SkinWidgets_RecentItems', '%s' % __addon__.getSetting("recentitems_enable"))
         self.WINDOW.setProperty('SkinWidgets_RandomItems_Update', 'false')
         self.RANDOMITEMS_UPDATE_METHOD = int(__addon__.getSetting("randomitems_method"))
+        self.RECENTITEMS_HOME_UPDATE = __addon__.getSetting("recentitems_homeupdate")
         # convert time to seconds, times 2 for 0,5 second sleep compensation
         self.RANDOMITEMS_TIME = int(__addon__.getSetting("randomitems_time").rstrip('0').rstrip('.')) * 60 * 2
 
@@ -511,6 +512,7 @@ class Main:
     def _daemon(self):
         # deamon is meant to keep script running at all time
         count = 0
+        home_update = False
         while (not xbmc.abortRequested) and self.WINDOW.getProperty('SkinWidgets_Running') == 'true':
             xbmc.sleep(500)
             if self.RANDOMITEMS_UPDATE_METHOD == 0:
@@ -522,8 +524,12 @@ class Main:
                 count = 0
                 self.WINDOW.setProperty('SkinWidgets_RandomItems_Update','false')
                 self._fetch_info_randomitems()
-                
-            
+            if  self.RECENTITEMS_HOME_UPDATE == 'true' and xbmcgui.getCurrentWindowId() == 10000 and home_update:
+                self._fetch_info_recentitems()
+                home_update = False
+            elif xbmcgui.getCurrentWindowId() != 10000:
+                home_update = True
+
     def _clear_properties(self, request):
         count = 0
         for count in range(int(self.LIMIT)):
