@@ -513,10 +513,10 @@ class Main:
                 count = 0
                 self.WINDOW.setProperty('SkinWidgets_RandomItems_Update','false')
                 self._fetch_info_randomitems()
-            if  self.RECENTITEMS_HOME_UPDATE == 'true' and xbmcgui.getCurrentWindowId() == 10000 and home_update:
+            if  self.RECENTITEMS_HOME_UPDATE == 'true' and home_update and xbmcgui.getCurrentWindowId() == 10000:
                 self._fetch_info_recentitems()
                 home_update = False
-            elif xbmcgui.getCurrentWindowId() != 10000:
+            elif self.RECENTITEMS_HOME_UPDATE == 'true' and not home_update and xbmcgui.getCurrentWindowId() != 10000:
                 home_update = True
 
     def _clear_properties(self, request):
@@ -669,14 +669,7 @@ class MyPlayer(xbmc.Player):
                     self.type = "episode"
 
     def onPlayBackEnded(self):
-        if self.type == 'movie':
-            self.action('movie')
-        elif self.type == 'episode':
-            self.action('episode')
-        elif self.type == 'album':
-            self.action('album')
-        self.type = ""
-        
+        self.onPlayBackStopped()
 
     def onPlayBackStopped(self):
         if self.type == 'movie':
