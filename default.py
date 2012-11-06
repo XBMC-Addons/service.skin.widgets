@@ -46,12 +46,20 @@ def log(txt):
 class Main:
     def __init__(self):
         self._parse_argv()
-        self._init_vars()
-        self._init_property()
         # check how we were executed
-        if self.ALBUMID:
+        if self.MOVIEID:
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %d } }, "id": 1 }' % int(self.MOVIEID))
+        elif self.EPISODEID:
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %d } }, "id": 1 }' % int(self.EPISODEID))
+        elif self.MUSICVIDEOID:
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %d } }, "id": 1 }' % int(self.MUSICVIDEOID))
+        elif self.ALBUMID:
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %d } }, "id": 1 }' % int(self.ALBUMID))
+        elif self.SONGID:
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %d } }, "id": 1 }' % int(self.SONGID))
         else:
+            self._init_vars()
+            self._init_property()
             # clear our property, if another instance is already running it should stop now
             self.WINDOW.clearProperty('SkinWidgets_Running')
             a_total = datetime.datetime.now()
@@ -86,7 +94,12 @@ class Main:
             params = dict( arg.split( "=" ) for arg in sys.argv[ 1 ].split( "&" ) )
         except:
             params = {}
+        self.MOVIEID = params.get( "movieid", "" )
+        self.EPISODEID = params.get( "episodeid", "" )
+        self.MUSICVIDEOID = params.get( "musicvideoid", "" )
         self.ALBUMID = params.get( "albumid", "" )
+        self.SONGID = params.get( "songid", "" )
+        print self.EPISODEID
 
     def _fetch_info_recommended(self):
         a = datetime.datetime.now()
@@ -157,6 +170,7 @@ class Main:
                     watched = "false"
                 art = item['art']
                 path = media_path(item['file'])
+                play = 'XBMC.RunScript(' + __addonid__ + ',movieid=' + str(item.get('movieid')) + ')'
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                            item['streamdetails'])
                 self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
@@ -181,6 +195,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Watched"         % (request, count), watched)
                 self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"            % (request, count), play)
                 self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
                 self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
                 self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
@@ -216,6 +231,7 @@ class Main:
                     played = '0%'
                 art = item['art']
                 path = media_path(item['file'])
+                play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item2.get('episodeid')) + ')'
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                  item2['streamdetails'])
                 self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item2['title'])
@@ -238,6 +254,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"       % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"                % (request, count), item2['file'])
                 self.WINDOW.setProperty("%s.%d.Path"                % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"                % (request, count), play)
                 self.WINDOW.setProperty("%s.%d.VideoCodec"          % (request, count), streaminfo['videocodec'])
                 self.WINDOW.setProperty("%s.%d.VideoResolution"     % (request, count), streaminfo['videoresolution'])
                 self.WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
@@ -288,6 +305,7 @@ class Main:
                     played = '0%'
                 art = item['art']
                 path = media_path(item['file'])
+                play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item.get('episodeid')) + ')'
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                  item['streamdetails'])
                 self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item['title'])
@@ -312,6 +330,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.PercentPlayed"       % (request, count), played)
                 self.WINDOW.setProperty("%s.%d.File"                % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"                % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"                % (request, count), play)
                 self.WINDOW.setProperty("%s.%d.VideoCodec"          % (request, count), streaminfo['videocodec'])
                 self.WINDOW.setProperty("%s.%d.VideoResolution"     % (request, count), streaminfo['videoresolution'])
                 self.WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
@@ -344,9 +363,10 @@ class Main:
             count = 0
             for item in json_response['result']['musicvideos']:
                 count += 1
+                play = 'XBMC.RunScript(' + __addonid__ + ',musicvideoid=' + str(item.get('musicvideoid')) + ')'
+                path = media_path(item['file'])
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                  item['streamdetails'])
-                path = media_path(item['file'])
                 self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Artist"          % (request, count), " / ".join(item['artist']))
                 self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
@@ -359,6 +379,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Art(fanart)"     % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"            % (request, count), play)
                 self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
                 self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
                 self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
@@ -383,7 +404,7 @@ class Main:
                 rating = str(item['rating'])
                 if rating == '48':
                     rating = ''
-                path = 'XBMC.RunScript(' + __addonid__ + ',albumid=' + str(item.get('albumid')) + ')'
+                play = 'XBMC.RunScript(' + __addonid__ + ',albumid=' + str(item.get('albumid')) + ')'
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Label"       % (request, count), item['title']) #needs to be removed
                 self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
@@ -396,7 +417,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Fanart"      % (request, count), item['fanart']) #remove
                 self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
                 self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
-                self.WINDOW.setProperty("%s.%d.Play"        % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
 
     def _fetch_artist(self, request):
         # Random artist
@@ -432,6 +453,7 @@ class Main:
             for item in jsonobject['result']['songs']:
                 count += 1
                 path = media_path(item['file'])
+                play = 'XBMC.RunScript(' + __addonid__ + ',songid=' + str(item.get('songid')) + ')'
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
                 self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
@@ -443,6 +465,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
+                self.WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
 
     def _fetch_addon(self, request):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"properties": ["name", "author", "summary", "version", "fanart", "thumbnail"]}, "id": 1}')
