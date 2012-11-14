@@ -48,9 +48,9 @@ class Main:
         self._parse_argv()
         # check how we were executed
         if self.MOVIEID:
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %d } }, "id": 1 }' % int(self.MOVIEID))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %d }, "options":{ "resume": true } }, "id": 1 }' % int(self.MOVIEID))
         elif self.EPISODEID:
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %d } }, "id": 1 }' % int(self.EPISODEID))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %d }, "options":{ "resume": true }  }, "id": 1 }' % int(self.EPISODEID))
         elif self.MUSICVIDEOID:
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %d } }, "id": 1 }' % int(self.MUSICVIDEOID))
         elif self.ALBUMID:
@@ -452,8 +452,8 @@ class Main:
             count = 0
             for item in jsonobject['result']['songs']:
                 count += 1
-                path = media_path(item['file'])
                 play = 'XBMC.RunScript(' + __addonid__ + ',songid=' + str(item.get('songid')) + ')'
+                path = media_path(item['file'])
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
                 self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))

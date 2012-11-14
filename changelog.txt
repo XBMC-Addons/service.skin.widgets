@@ -1,8 +1,5 @@
-v0.0.12
-- Use the correct way to play media by using JSON-RPC
-	
 v0.0.11
-- Add missng landscape for tvshows
+- Always resume episodes and movies
 
 v0.0.10
 - Drop old artwork labels for tvshows and movies
