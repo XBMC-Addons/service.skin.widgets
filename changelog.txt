@@ -1,4 +1,4 @@
-v0.0.11
+v0.0.14
 - Always resume episodes and movies
 
 v0.0.10
