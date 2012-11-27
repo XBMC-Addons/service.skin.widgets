@@ -230,8 +230,6 @@ class Main:
                     resume = "false"
                     played = '0%'
                 art = item['art']
-                print art
-                print art2
                 path = media_path(item['file'])
                 play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item2.get('episodeid')) + ')'
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
@@ -310,7 +308,6 @@ class Main:
                 play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item.get('episodeid')) + ')'
                 streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                  item['streamdetails'])
-                print art
                 self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item['title'])
                 self.WINDOW.setProperty("%s.%d.Episode"             % (request, count), episode)
                 self.WINDOW.setProperty("%s.%d.EpisodeNo"           % (request, count), episodeno)
