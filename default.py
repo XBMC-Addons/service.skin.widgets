@@ -206,6 +206,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
                 self.WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
                 self.WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
+        del json_query
 
     def _fetch_tvshows_recommended(self, request):
         # First unplayed episode of recent played tvshows
@@ -265,6 +266,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
                 self.WINDOW.setProperty("%s.%d.AudioCodec"          % (request, count), streaminfo['audiocodec'])
                 self.WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
+        del json_query
 
     def _fetch_tvshows(self, request):
         season_folders = __addon__.getSetting("randomitems_seasonfolders")
@@ -341,6 +343,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
                 self.WINDOW.setProperty("%s.%d.AudioCodec"          % (request, count), streaminfo['audiocodec'])
                 self.WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
+        del json_query
 
     def _fetch_seasonthumb(self, tvshowid, seasonnumber):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetSeasons", "params": {"properties": ["season", "thumbnail"], "tvshowid":%s }, "id": 1}' % tvshowid)
@@ -395,6 +398,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
                 self.WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
                 self.WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
+        del json_query
 
     def _fetch_albums(self, request):
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"], "limits": {"end": %d},' %self.LIMIT
@@ -428,6 +432,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
                 self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 self.WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
+        del json_query
 
     def _fetch_artist(self, request):
         # Random artist
@@ -476,6 +481,7 @@ class Main:
                 self.WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 self.WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
                 self.WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
+        del json_query
 
     def _fetch_addon(self, request):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"properties": ["name", "author", "summary", "version", "fanart", "thumbnail"]}, "id": 1}')
@@ -507,7 +513,8 @@ class Main:
                 if count == self.LIMIT:
                     break
             self.WINDOW.setProperty("%s.Count" % (request), str(json_query['result']['limits']['total']))
-                
+        del json_query
+
     def _daemon(self):
         # deamon is meant to keep script running at all time
         count = 0
@@ -696,3 +703,4 @@ if (__name__ == "__main__"):
     del Widgets_Monitor
     del Widgets_Player
     del Main
+    log('script version %s stopped' % __addonversion__)
