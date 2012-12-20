@@ -649,12 +649,12 @@ class MyMonitor(xbmc.Monitor):
 class MyPlayer(xbmc.Player):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
+        self.type = ""
         self.action = kwargs[ "action" ]
         self.substrings = [ '-trailer', 'http://' ]
 
     def onPlayBackStarted(self):
         xbmc.sleep(1000)
-        self.type = ""
         # Set values based on the file content
         if (self.isPlayingAudio()):
             self.type = "music"  
