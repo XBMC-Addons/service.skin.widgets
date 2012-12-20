@@ -75,8 +75,8 @@ class Main:
 
     def _init_vars(self):
         self.WINDOW = xbmcgui.Window(10000)
-        self.Player = MyPlayer(action = self._update)
-        self.Monitor = MyMonitor(update_listitems = self._update, update_settings = self._init_property)
+        self.Player = Widgets_Player(action = self._update)
+        self.Monitor = Widgets_Monitor(update_listitems = self._update, update_settings = self._init_property)
         self.LIMIT = 20
 
     def _init_property(self):
@@ -536,7 +536,7 @@ class Main:
             self.WINDOW.clearProperty("%s.%d.Title" % (request, count))
 
     def _update(self, type):
-        xbmc.sleep(500)
+        xbmc.sleep(400)
         if type == 'movie':
             self._fetch_movies('RecommendedMovie')
             self._fetch_movies('RecentMovie')
@@ -634,7 +634,7 @@ def media_streamdetails(filename, streamdetails):
     return info
 
     
-class MyMonitor(xbmc.Monitor):
+class Widgets_Monitor(xbmc.Monitor):
     def __init__(self, *args, **kwargs):
         xbmc.Monitor.__init__(self)
         self.update_listitems = kwargs['update_listitems']
@@ -646,7 +646,7 @@ class MyMonitor(xbmc.Monitor):
     def onSettingsChanged(self):
         self.update_settings()
 
-class MyPlayer(xbmc.Player):
+class Widgets_Player(xbmc.Player):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
         self.type = ""
@@ -693,3 +693,6 @@ class MyPlayer(xbmc.Player):
 if (__name__ == "__main__"):
     log('script version %s started' % __addonversion__)
     Main()
+    del Widgets_Monitor
+    del Widgets_Player
+    del Main
