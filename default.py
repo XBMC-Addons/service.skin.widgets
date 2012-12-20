@@ -158,7 +158,7 @@ class Main:
             count = 0
             for item in json_response['result']['movies']:
                 count += 1
-                if item['resume']['position'] > 0:
+                if (item['resume']['position'] and item['resume']['total'])> 0:
                     resume = "true"
                     played = '%s%%'%int((float(item['resume']['position']) / float(item['resume']['total'])) * 100)
                 else:
@@ -228,7 +228,7 @@ class Main:
                         episodeno = "s%se%s" %(season,episode)
                         art2 = item2['art']
                 #seasonthumb = ''
-                if item2['resume']['position'] > 0:
+                if (item2['resume']['position'] and item2['resume']['total']) > 0:
                     resume = "true"
                     played = '%s%%'%int((float(item2['resume']['position']) / float(item2['resume']['total'])) * 100)
                 else:
@@ -302,7 +302,7 @@ class Main:
                 episodeno = "s%se%s" %(season,episode)
                 #seasonthumb = ''
                 rating = str(round(float(item['rating']),1))
-                if item['resume']['position'] > 0:
+                if (item['resume']['position'] and item['resume']['total']) > 0:
                     resume = "true"
                     played = '%s%%'%int((float(item['resume']['position']) / float(item['resume']['total'])) * 100)
                 else:
