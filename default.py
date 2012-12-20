@@ -152,11 +152,11 @@ class Main:
         else:
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" } }}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('movies'):
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('movies'):
             self._clear_properties(request)
             count = 0
-            for item in json_response['result']['movies']:
+            for item in json_query['result']['movies']:
                 count += 1
                 if (item['resume']['position'] and item['resume']['total'])> 0:
                     resume = "true"
@@ -211,17 +211,17 @@ class Main:
         # First unplayed episode of recent played tvshows
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('tvshows'):
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('tvshows'):
             self._clear_properties(request)
             count = 0
-            for item in json_response['result']['tvshows']:
+            for item in json_query['result']['tvshows']:
                 count += 1
                 json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": %d, "properties": ["title", "playcount", "plot", "season", "episode", "showtitle", "file", "lastplayed", "rating", "resume", "art", "streamdetails"], "sort": {"method": "episode"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}, "limits": {"end": 1}}, "id": 1}' %item['tvshowid'])
                 json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-                json_response2 = simplejson.loads(json_query2)
-                if json_response2.has_key('result') and json_response2['result'] != None and json_response2['result'].has_key('episodes'):
-                    for item2 in json_response2['result']['episodes']:
+                json_query2 = simplejson.loads(json_query2)
+                if json_query2.has_key('result') and json_query2['result'] != None and json_query2['result'].has_key('episodes'):
+                    for item2 in json_query2['result']['episodes']:
                         episode = ("%.2d" % float(item2['episode']))
                         season = "%.2d" % float(item2['season'])
                         rating = str(round(float(item2['rating']),1))
@@ -278,20 +278,20 @@ class Main:
         else:
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }}}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('episodes'):
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('episodes'):
             self._clear_properties(request)
             count = 0
-            for item in json_response['result']['episodes']:
+            for item in json_query['result']['episodes']:
                 count += 1
                 '''
                 # This part is commented out because it takes 1.5second extra on my system to request these which doubles the total time.
                 # Hence the ugly path hack that will require users to have season folders.
                 json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["file", "studio"], "tvshowid":%s}, "id": 1}' %item['tvshowid'])
                 json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-                json_response2 = simplejson.loads(json_query2)
-                path = json_response2['result']['tvshowdetails']['file']
-                studio = json_response2['result']['tvshowdetails']['studio'][0]
+                json_query2 = simplejson.loads(json_query2)
+                path = json_query2['result']['tvshowdetails']['file']
+                studio = json_query2['result']['tvshowdetails']['studio'][0]
                 '''
                 if season_folders == 'true':
                     path = os.path.split(media_path(item['file']))[0]
@@ -345,9 +345,9 @@ class Main:
     def _fetch_seasonthumb(self, tvshowid, seasonnumber):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetSeasons", "params": {"properties": ["season", "thumbnail"], "tvshowid":%s }, "id": 1}' % tvshowid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('seasons'):
-            for item in json_response['result']['seasons']:
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('seasons'):
+            for item in json_query['result']['seasons']:
                 season = "%.2d" % float(item['season'])
                 if season == seasonnumber:
                     thumbnail = item['thumbnail']
@@ -362,11 +362,11 @@ class Main:
         else:
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('musicvideos'):
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('musicvideos'):
             self._clear_properties(request)        
             count = 0
-            for item in json_response['result']['musicvideos']:
+            for item in json_query['result']['musicvideos']:
                 count += 1
                 play = 'XBMC.RunScript(' + __addonid__ + ',musicvideoid=' + str(item.get('musicvideoid')) + ')'
                 path = media_path(item['file'])
@@ -404,12 +404,12 @@ class Main:
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded" }}}' %json_string)
         else:
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
-        json_response = unicode(json_query, 'utf-8', errors='ignore')
-        jsonobject = simplejson.loads(json_response)
-        if jsonobject['result'].has_key('albums'):
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('albums'):
             self._clear_properties(request)
             count = 0
-            for item in jsonobject['result']['albums']:
+            for item in json_query['result']['albums']:
                 count += 1
                 rating = str(item['rating'])
                 if rating == '48':
@@ -432,12 +432,12 @@ class Main:
     def _fetch_artist(self, request):
         # Random artist
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
-        json_response = unicode(json_query, 'utf-8', errors='ignore')
-        jsonobject = simplejson.loads(json_response)
-        if jsonobject['result'].has_key('artists'):
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('artists'):
             self._clear_properties(request)
             count = 0
-            for item in jsonobject['result']['artists']:
+            for item in json_query['result']['artists']:
                 count += 1
                 path = 'musicdb://2/' + str(item['artistid']) + '/'
                 self.WINDOW.setProperty("%s.%d.Title"       % (request, count), item['label'])
@@ -455,12 +455,12 @@ class Main:
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}'  %json_string)
         else:
             json_query = xbmc.executeJSONRPC('%s  "sort": {"method": "random"}}}'  %json_string)
-        json_response = unicode(json_query, 'utf-8', errors='ignore')
-        jsonobject = simplejson.loads(json_response)
-        if jsonobject['result'].has_key('songs'):
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('songs'):
             self._clear_properties(request)
             count = 0
-            for item in jsonobject['result']['songs']:
+            for item in json_query['result']['songs']:
                 count += 1
                 play = 'XBMC.RunScript(' + __addonid__ + ',songid=' + str(item.get('songid')) + ')'
                 path = media_path(item['file'])
@@ -479,12 +479,12 @@ class Main:
 
     def _fetch_addon(self, request):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"properties": ["name", "author", "summary", "version", "fanart", "thumbnail"]}, "id": 1}')
-        json_response = unicode(json_query, 'utf-8', errors='ignore')
-        jsonobject = simplejson.loads(json_response)
-        if jsonobject['result'].has_key('addons'):
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
+        if json_query['result'].has_key('addons'):
             # find plugins and scripts
             addonlist = []
-            for item in jsonobject['result']['addons']:
+            for item in json_query['result']['addons']:
                 if item['type'] == 'xbmc.python.script' or item['type'] == 'xbmc.python.pluginsource':
                     addonlist.append(item)
             # randomize the list
@@ -506,7 +506,7 @@ class Main:
                 # stop if we've reached the number of items we need
                 if count == self.LIMIT:
                     break
-            self.WINDOW.setProperty("%s.Count" % (request), str(jsonobject['result']['limits']['total']))
+            self.WINDOW.setProperty("%s.Count" % (request), str(json_query['result']['limits']['total']))
                 
     def _daemon(self):
         # deamon is meant to keep script running at all time
