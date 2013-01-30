@@ -527,20 +527,21 @@ class Main:
         home_update = False
         while (not xbmc.abortRequested) and self.WINDOW.getProperty('SkinWidgets_Running') == 'true':
             xbmc.sleep(500)
-            if self.RANDOMITEMS_UPDATE_METHOD == 0:
-                count += 1
-                if count == self.RANDOMITEMS_TIME:
+            if not xbmc.Player().isPlayingVideo():
+                if self.RANDOMITEMS_UPDATE_METHOD == 0:
+                    count += 1
+                    if count == self.RANDOMITEMS_TIME:
+                        self._fetch_info_randomitems()
+                        count = 0    # reset counter
+                if self.WINDOW.getProperty('SkinWidgets_RandomItems_Update') == 'true':
+                    count = 0
+                    self.WINDOW.setProperty('SkinWidgets_RandomItems_Update','false')
                     self._fetch_info_randomitems()
-                    count = 0    # reset counter
-            if self.WINDOW.getProperty('SkinWidgets_RandomItems_Update') == 'true':
-                count = 0
-                self.WINDOW.setProperty('SkinWidgets_RandomItems_Update','false')
-                self._fetch_info_randomitems()
-            if  self.RECENTITEMS_HOME_UPDATE == 'true' and home_update and xbmcgui.getCurrentWindowId() == 10000:
-                self._fetch_info_recentitems()
-                home_update = False
-            elif self.RECENTITEMS_HOME_UPDATE == 'true' and not home_update and xbmcgui.getCurrentWindowId() != 10000:
-                home_update = True
+                if  self.RECENTITEMS_HOME_UPDATE == 'true' and home_update and xbmcgui.getCurrentWindowId() == 10000:
+                    self._fetch_info_recentitems()
+                    home_update = False
+                elif self.RECENTITEMS_HOME_UPDATE == 'true' and not home_update and xbmcgui.getCurrentWindowId() != 10000:
+                    home_update = True
 
     def _clear_properties(self, request):
         count = 0
