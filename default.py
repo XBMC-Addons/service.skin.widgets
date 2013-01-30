@@ -550,7 +550,7 @@ class Main:
             self.WINDOW.clearProperty("%s.%d.Title" % (request, count))
 
     def _update(self, type):
-        xbmc.sleep(500)
+        xbmc.sleep(1000)
         if type == 'movie':
             self._fetch_movies('RecommendedMovie')
             self._fetch_movies('RecentMovie')
