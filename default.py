@@ -154,7 +154,7 @@ class Main:
                 json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" } }}' %json_string)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('movies'):
+            if json_query.has_key('result') and json_query['result'].has_key('movies'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['movies']:
@@ -215,7 +215,7 @@ class Main:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('tvshows'):
+            if json_query.has_key('result') and json_query['result'].has_key('tvshows'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['tvshows']:
@@ -286,7 +286,7 @@ class Main:
                 json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random" }}}' %json_string)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('episodes'):
+            if json_query.has_key('result') and json_query['result'].has_key('episodes'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['episodes']:
@@ -350,7 +350,7 @@ class Main:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetSeasons", "params": {"properties": ["season", "thumbnail"], "tvshowid":%s }, "id": 1}' % tvshowid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
-        if json_query['result'].has_key('seasons'):
+        if json_query.has_key('result') and json_query['result'].has_key('seasons'):
             for item in json_query['result']['seasons']:
                 season = "%.2d" % float(item['season'])
                 if season == seasonnumber:
@@ -368,7 +368,7 @@ class Main:
                 json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('musicvideos'):
+            if json_query.has_key('result') and json_query['result'].has_key('musicvideos'):
                 self._clear_properties(request)        
                 count = 0
                 for item in json_query['result']['musicvideos']:
@@ -413,7 +413,7 @@ class Main:
                 json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}' %json_string)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('albums'):
+            if json_query.has_key('result') and json_query['result'].has_key('albums'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['albums']:
@@ -443,7 +443,7 @@ class Main:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('artists'):
+            if json_query.has_key('result') and json_query['result'].has_key('artists'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['artists']:
@@ -467,7 +467,7 @@ class Main:
                 json_query = xbmc.executeJSONRPC('%s  "sort": {"method": "random"}}}'  %json_string)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('songs'):
+            if json_query.has_key('result') and json_query['result'].has_key('songs'):
                 self._clear_properties(request)
                 count = 0
                 for item in json_query['result']['songs']:
@@ -493,7 +493,7 @@ class Main:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Addons.GetAddons", "params": {"properties": ["name", "author", "summary", "version", "fanart", "thumbnail"]}, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if json_query['result'].has_key('addons'):
+            if json_query.has_key('result') and json_query['result'].has_key('addons'):
                 # find plugins and scripts
                 addonlist = []
                 for item in json_query['result']['addons']:
