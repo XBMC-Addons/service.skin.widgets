@@ -42,7 +42,9 @@
         <description lang="sk">Widgety Vzhľadov</description>
         <description lang="sv">Skal widgetar</description>
         <description lang="zh">皮肤微件</description>
+        <disclaimer lang="en">For information visit the wiki page or XBMC forum.</disclaimer>
         <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum>http://forum.xbmc.org/showthread.php?tid=142389</forum>
         <source>https://github.com/XBMC-Addons/service.skin.widgets</source>
     </extension>
