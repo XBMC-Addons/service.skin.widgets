@@ -49,9 +49,9 @@ class Main:
         self._parse_argv()
         # check how we were executed
         if self.MOVIEID:
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %d }, "options":{ "resume": true } }, "id": 1 }' % int(self.MOVIEID))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %d }, "options":{ "resume": %s } }, "id": 1 }' % (int(self.MOVIEID), self.RESUME))
         elif self.EPISODEID:
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %d }, "options":{ "resume": true }  }, "id": 1 }' % int(self.EPISODEID))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %d }, "options":{ "resume": %s }  }, "id": 1 }' % (int(self.EPISODEID), self.RESUME))
         elif self.MUSICVIDEOID:
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %d } }, "id": 1 }' % int(self.MUSICVIDEOID))
         elif self.ALBUMID:
@@ -101,6 +101,12 @@ class Main:
         self.MUSICVIDEOID = params.get( "musicvideoid", "" )
         self.ALBUMID = params.get( "albumid", "" )
         self.SONGID = params.get( "songid", "" )
+        self.RESUME = "true"
+        for arg in sys.argv:
+            param = str(arg)
+            if 'resume=' in param:
+                if param.replace('resume=', '') == "false":
+                    self.RESUME = "false"
 
     def _fetch_info_recommended(self):
         a = datetime.datetime.now()
@@ -179,6 +185,7 @@ class Main:
                     play = 'XBMC.RunScript(' + __addonid__ + ',movieid=' + str(item.get('movieid')) + ')'
                     streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                item['streamdetails'])
+                    self.WINDOW.setProperty("%s.%d.DBID"           % (request, count), str(item.get('movieid')))
                     self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
                     self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
                     self.WINDOW.setProperty("%s.%d.Genre"           % (request, count), " / ".join(item['genre']))
@@ -255,6 +262,7 @@ class Main:
                     play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item2.get('episodeid')) + ')'
                     streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                      item2['streamdetails'])
+                    self.WINDOW.setProperty("%s.%d.DBID"                % (request, count), str(item2.get('episodeid')))
                     self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item2['title'])
                     self.WINDOW.setProperty("%s.%d.Episode"             % (request, count), episode)
                     self.WINDOW.setProperty("%s.%d.EpisodeNo"           % (request, count), episodeno)
@@ -341,6 +349,7 @@ class Main:
                     play = 'XBMC.RunScript(' + __addonid__ + ',episodeid=' + str(item.get('episodeid')) + ')'
                     streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                      item['streamdetails'])
+                    self.WINDOW.setProperty("%s.%d.DBID"                % (request, count), str(item.get('episodeid')))
                     self.WINDOW.setProperty("%s.%d.Title"               % (request, count), item['title'])
                     self.WINDOW.setProperty("%s.%d.Episode"             % (request, count), episode)
                     self.WINDOW.setProperty("%s.%d.EpisodeNo"           % (request, count), episodeno)
