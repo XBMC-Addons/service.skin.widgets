@@ -223,7 +223,7 @@ class Main:
     def _fetch_tvshows_recommended(self, request):
         if not xbmc.abortRequested:
             # First unplayed episode of recent played tvshows
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "mpaa", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %self.LIMIT)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if json_query.has_key('result') and json_query['result'].has_key('tvshows'):
@@ -282,6 +282,7 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.Art(tvshow.landscape)"% (request, count), art2.get('tvshow.landscape',''))
                     #self.WINDOW.setProperty("%s.%d.Art(season.poster)" % (request, count), seasonthumb)
                     self.WINDOW.setProperty("%s.%d.Studio"              % (request, count), item['studio'][0])
+                    self.WINDOW.setProperty("%s.%d.mpaa"                % (request, count), item['mpaa'])
                     self.WINDOW.setProperty("%s.%d.Resume"              % (request, count), resume)
                     self.WINDOW.setProperty("%s.%d.PercentPlayed"       % (request, count), played)
                     self.WINDOW.setProperty("%s.%d.Watched"             % (request, count), watched)
