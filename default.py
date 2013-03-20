@@ -435,7 +435,7 @@ class Main:
 
     def _fetch_albums(self, request):
         if not xbmc.abortRequested:
-            json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"], "limits": {"end": %d},' %self.LIMIT
+            json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"], "limits": {"end": %d},' %self.LIMIT
             if request == 'RecommendedAlbum':
                 json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}' %json_string)
             elif request == 'RecentAlbum':
@@ -457,6 +457,10 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.Label"       % (request, count), item['title']) #needs to be removed
                     self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
                     self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
+                    self.WINDOW.setProperty("%s.%d.Theme"       % (request, count), " / ".join(item['theme']))
+                    self.WINDOW.setProperty("%s.%d.Mood"       % (request, count), " / ".join(item['mood']))
+                    self.WINDOW.setProperty("%s.%d.Style"       % (request, count), " / ".join(item['style']))
+                    self.WINDOW.setProperty("%s.%d.Type"       % (request, count), " / ".join(item['type']))
                     self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
                     self.WINDOW.setProperty("%s.%d.RecordLabel" % (request, count), item['albumlabel'])
                     self.WINDOW.setProperty("%s.%d.Description" % (request, count), item['description'])
