@@ -395,7 +395,7 @@ class Main:
 
     def _fetch_musicvideo(self, request):
         if not xbmc.abortRequested:
-            json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file", "streamdetails"],  "limits": {"end": %d},' %self.LIMIT
+            json_string = '{"jsonrpc": "2.0",  "id": 1, "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["title", "artist", "playcount", "year", "plot", "genre", "runtime", "fanart", "thumbnail", "file", "streamdetails", "resume"],  "limits": {"end": %d},' %self.LIMIT
             if request == 'RecommendedMusicVideo':
                 json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "playcount" }}}'  %json_string)
             elif request == 'RecentMusicVideo':
@@ -409,10 +409,21 @@ class Main:
                 count = 0
                 for item in json_query['result']['musicvideos']:
                     count += 1
+                    if (item['resume']['position'] and item['resume']['total'])> 0:
+                        resume = "true"
+                        played = '%s%%'%int((float(item['resume']['position']) / float(item['resume']['total'])) * 100)
+                    else:
+                        resume = "false"
+                        played = '0%'
+                    if item['playcount'] >= 1:
+                        watched = "true"
+                    else:
+                        watched = "false"
                     play = 'XBMC.RunScript(' + __addonid__ + ',musicvideoid=' + str(item.get('musicvideoid')) + ')'
                     path = media_path(item['file'])
                     streaminfo = media_streamdetails(item['file'].encode('utf-8').lower(),
                                                      item['streamdetails'])
+                    self.WINDOW.setProperty("%s.%d.DBID"           % (request, count), str(item.get('musicvideoid')))
                     self.WINDOW.setProperty("%s.%d.Title"           % (request, count), item['title'])
                     self.WINDOW.setProperty("%s.%d.Artist"          % (request, count), " / ".join(item['artist']))
                     self.WINDOW.setProperty("%s.%d.Year"            % (request, count), str(item['year']))
@@ -425,6 +436,9 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.Art(fanart)"     % (request, count), item['fanart'])
                     self.WINDOW.setProperty("%s.%d.File"            % (request, count), item['file'])
                     self.WINDOW.setProperty("%s.%d.Path"            % (request, count), path)
+                    self.WINDOW.setProperty("%s.%d.Resume"          % (request, count), resume)
+                    self.WINDOW.setProperty("%s.%d.PercentPlayed"   % (request, count), played)
+                    self.WINDOW.setProperty("%s.%d.Watched"         % (request, count), watched)
                     self.WINDOW.setProperty("%s.%d.Play"            % (request, count), play)
                     self.WINDOW.setProperty("%s.%d.VideoCodec"      % (request, count), streaminfo['videocodec'])
                     self.WINDOW.setProperty("%s.%d.VideoResolution" % (request, count), streaminfo['videoresolution'])
