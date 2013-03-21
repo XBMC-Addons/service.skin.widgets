@@ -472,9 +472,9 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.Artist"      % (request, count), " / ".join(item['artist']))
                     self.WINDOW.setProperty("%s.%d.Genre"       % (request, count), " / ".join(item['genre']))
                     self.WINDOW.setProperty("%s.%d.Theme"       % (request, count), " / ".join(item['theme']))
-                    self.WINDOW.setProperty("%s.%d.Mood"       % (request, count), " / ".join(item['mood']))
+                    self.WINDOW.setProperty("%s.%d.Mood"        % (request, count), " / ".join(item['mood']))
                     self.WINDOW.setProperty("%s.%d.Style"       % (request, count), " / ".join(item['style']))
-                    self.WINDOW.setProperty("%s.%d.Type"       % (request, count), " / ".join(item['type']))
+                    self.WINDOW.setProperty("%s.%d.Type"        % (request, count), " / ".join(item['type']))
                     self.WINDOW.setProperty("%s.%d.Year"        % (request, count), str(item['year']))
                     self.WINDOW.setProperty("%s.%d.RecordLabel" % (request, count), item['albumlabel'])
                     self.WINDOW.setProperty("%s.%d.Description" % (request, count), item['description'])
@@ -489,7 +489,7 @@ class Main:
     def _fetch_artist(self, request):
         if not xbmc.abortRequested:
             # Random artist
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if json_query.has_key('result') and json_query['result'].has_key('artists'):
@@ -505,6 +505,13 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
                     self.WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                     self.WINDOW.setProperty("%s.%d.Description" % (request, count), item['description'])
+                    self.WINDOW.setProperty("%s.%d.Born"        % (request, count), item['born'])
+                    self.WINDOW.setProperty("%s.%d.Died"        % (request, count), item['died'])
+                    self.WINDOW.setProperty("%s.%d.Formed"      % (request, count), item['formed'])
+                    self.WINDOW.setProperty("%s.%d.Disbanded"   % (request, count), item['disbanded'])
+                    self.WINDOW.setProperty("%s.%d.YearsActive" % (request, count), " / ".join(item['yearsactive']))
+                    self.WINDOW.setProperty("%s.%d.Style"       % (request, count), " / ".join(item['style']))
+                    self.WINDOW.setProperty("%s.%d.Mood"        % (request, count), " / ".join(item['mood']))
                     self.WINDOW.setProperty("%s.%d.LibraryPath" % (request, count), path)
 
     def _fetch_song(self, request):
