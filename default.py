@@ -489,7 +489,7 @@ class Main:
     def _fetch_artist(self, request):
         if not xbmc.abortRequested:
             # Random artist
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "sort": {"method": "random"}, "limits": {"end": %d}}, "id": 1}'  %self.LIMIT)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if json_query.has_key('result') and json_query['result'].has_key('artists'):
@@ -512,6 +512,7 @@ class Main:
                     self.WINDOW.setProperty("%s.%d.YearsActive" % (request, count), " / ".join(item['yearsactive']))
                     self.WINDOW.setProperty("%s.%d.Style"       % (request, count), " / ".join(item['style']))
                     self.WINDOW.setProperty("%s.%d.Mood"        % (request, count), " / ".join(item['mood']))
+                    self.WINDOW.setProperty("%s.%d.Instrument"  % (request, count), " / ".join(item['instrument']))
                     self.WINDOW.setProperty("%s.%d.LibraryPath" % (request, count), path)
 
     def _fetch_song(self, request):
