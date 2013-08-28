@@ -86,7 +86,7 @@ class Main:
         for item_group in clearlist_groups:
             for item_type in clearlist_types:
                 clear = item_group + item_type
-                  self._clear_properties(clear)
+                self._clear_properties(clear)
         self._init_property
         self._fetch_info_randomitems()
         self._fetch_info_recommended()
