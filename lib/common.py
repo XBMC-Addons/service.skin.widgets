@@ -30,3 +30,7 @@ __addonpath__   = __addon__.getAddonInfo('path')
 __addonprofile__= xbmc.translatePath(__addon__.getAddonInfo('profile')).decode('utf-8')
 __icon__        = __addon__.getAddonInfo('icon')
 __localize__    = __addon__.getLocalizedString
+
+def log(txt):
+    message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
+    xbmc.log(msg=message, level=xbmc.LOGDEBUG)

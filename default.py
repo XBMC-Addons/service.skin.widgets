@@ -29,6 +29,7 @@ import datetime
 import _strptime
 import urllib
 import lib.common
+from lib.common import log
 
 if sys.version_info < (2, 7):
     import simplejson
@@ -43,10 +44,6 @@ __addonpath__    = lib.common.__addonpath__
 __addonprofile__ = lib.common.__addonprofile__
 __localize__     = lib.common.__localize__
 __version__      = lib.common.__version__
-
-def log(txt):
-    message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
-    xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
 class Main:
     def __init__(self):
