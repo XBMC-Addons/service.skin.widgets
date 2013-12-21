@@ -28,17 +28,21 @@ import random
 import datetime
 import _strptime
 import urllib
+import lib.common
 
 if sys.version_info < (2, 7):
     import simplejson
 else:
     import json as simplejson
 
-__addon__        = xbmcaddon.Addon()
-__addonversion__ = __addon__.getAddonInfo('version')
-__addonid__      = __addon__.getAddonInfo('id')
-__addonname__    = __addon__.getAddonInfo('name')
-__localize__    = __addon__.getLocalizedString
+### get addon info
+__addon__        = lib.common.__addon__
+__addonid__      = lib.common.__addonid__
+__addonname__    = lib.common.__addonname__
+__addonpath__    = lib.common.__addonpath__
+__addonprofile__ = lib.common.__addonprofile__
+__localize__     = lib.common.__localize__
+__version__      = lib.common.__version__
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
@@ -780,9 +784,9 @@ class Widgets_Player(xbmc.Player):
         self.type = ""
 
 if (__name__ == "__main__"):
-    log('script version %s started' % __addonversion__)
+    log('script version %s started' % __version__)
     Main()
     del Widgets_Monitor
     del Widgets_Player
     del Main
-    log('script version %s stopped' % __addonversion__)
+    log('script version %s stopped' % __version__)
