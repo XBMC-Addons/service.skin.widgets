@@ -166,7 +166,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.movies(request)
             if json_query:
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['movies']:
                     count += 1
@@ -228,7 +228,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.tvshows_recommended(request)
             if json_query:
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['tvshows']:
                     if xbmc.abortRequested:
@@ -303,7 +303,7 @@ class Main:
             json_query = REQ.tvshows(request)
             if json_query:
                 season_folders = __addon__.getSetting("randomitems_seasonfolders")
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['episodes']:
                     count += 1
@@ -379,7 +379,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.musicvideos(request)
             if json_query:
-                self._clear_properties(request)        
+                clear_properties(request)        
                 count = 0
                 for item in json_query['result']['musicvideos']:
                     count += 1
@@ -425,7 +425,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.albums(request)
             if json_query:
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['albums']:
                     count += 1
@@ -456,7 +456,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.artist(request)
             if json_query:
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['artists']:
                     count += 1
@@ -482,7 +482,7 @@ class Main:
         if not xbmc.abortRequested:
             json_query = REQ.songs(request)
             if json_query:
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in json_query['result']['songs']:
                     count += 1
@@ -513,7 +513,7 @@ class Main:
                         addonlist.append(item)
                 # randomize the list
                 random.shuffle(addonlist)
-                self._clear_properties(request)
+                clear_properties(request)
                 count = 0
                 for item in addonlist:
                     count += 1
@@ -555,12 +555,6 @@ class Main:
                 elif self.RECENTITEMS_HOME_UPDATE == 'true' and not home_update and xbmcgui.getCurrentWindowId() != 10000:
                     home_update = True
 
-    def _clear_properties(self, request):
-        count = 0
-        for count in range(int(LIMIT)):
-            count += 1
-            WINDOW.clearProperty("%s.%d.Title" % (request, count))
-
     def _update(self, type):
         xbmc.sleep(1000)
         if type == 'movie':
@@ -590,6 +584,12 @@ class Main:
                 self._fetch_artist('RandomArtist')
                 self._fetch_song('RandomSong')
                 self._fetch_addon('RandomAddon')
+
+def clear_properties(request):
+    count = 0
+    for count in range(int(LIMIT)):
+        count += 1
+        WINDOW.clearProperty("%s.%d.Title" % (request, count))
 
 class Widgets_Monitor(xbmc.Monitor):
     def __init__(self, *args, **kwargs):
