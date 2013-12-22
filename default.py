@@ -37,11 +37,7 @@ LIMIT = 20
 
 ### get addon info
 __addon__        = lib.common.__addon__
-__addonid__      = lib.common.__addonid__
-__addonname__    = lib.common.__addonname__
-__addonpath__    = lib.common.__addonpath__
 __addonprofile__ = lib.common.__addonprofile__
-__localize__     = lib.common.__localize__
 __version__      = lib.common.__version__
 
 class Main:
@@ -131,7 +127,6 @@ class Main:
     def _fetch_info_randomitems(self):
         a = datetime.datetime.now()
         if __addon__.getSetting("randomitems_enable") == 'true':
-            self.RANDOMITEMS_UNPLAYED = __addon__.getSetting("randomitems_unplayed") == 'true'
             self._fetch_movies('RandomMovie')
             self._fetch_tvshows('RandomEpisode')
             self._fetch_musicvideos('RandomMusicVideo')
@@ -146,7 +141,6 @@ class Main:
     def _fetch_info_recentitems(self):
         a = datetime.datetime.now()
         if __addon__.getSetting("recentitems_enable") == 'true':
-            self.RECENTITEMS_UNPLAYED = __addon__.getSetting("recentitems_unplayed") == 'true'
             self._fetch_movies('RecentMovie')
             self._fetch_tvshows('RecentEpisode')
             self._fetch_musicvideos('RecentMusicVideo')
