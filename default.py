@@ -233,12 +233,6 @@ class Main:
                 self._fetch_songs('RandomSong')
                 self._fetch_addons('RandomAddon')
 
-def clear_properties(request):
-    count = 0
-    for count in range(int(LIMIT)):
-        count += 1
-        WINDOW.clearProperty("%s.%d.Title" % (request, count))
-
 class Widgets_Monitor(xbmc.Monitor):
     def __init__(self, *args, **kwargs):
         xbmc.Monitor.__init__(self)
