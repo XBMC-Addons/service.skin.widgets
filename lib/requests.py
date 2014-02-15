@@ -130,7 +130,7 @@ class req:
             return False
 
     def songs(self, request):
-        json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "playcount", "artist", "album", "year", "file", "thumbnail", "fanart", "rating"], "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}, "limits": {"end": %d},' %LIMIT
+        json_string = '{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "playcount", "genre", "artist", "album", "year", "file", "thumbnail", "fanart", "rating"], "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}, "limits": {"end": %d},' %LIMIT
         if request == 'RandomSong' and RANDOMITEMS_UNPLAYED == "True":
             json_query = xbmc.executeJSONRPC('%s "sort": {"method": "random"}}}'  %json_string)
         else:
