@@ -18,6 +18,7 @@
 #
 
 import os
+import urllib
 
 def media_path(path):
     # Check for stacked movies
