@@ -58,13 +58,13 @@ class Main:
             self._init_property()
             # clear our property, if another instance is already running it should stop now
             WINDOW.clearProperty('SkinWidgets_Running')
-            a_total = datetime.datetime.now()
+            #a_total = datetime.datetime.now()
             self._fetch_info_randomitems()
             self._fetch_info_recommended()
             self._fetch_info_recentitems()
-            b_total = datetime.datetime.now()
-            c_total = b_total - a_total
-            log('Total time needed for all queries: %s' % c_total)
+            #b_total = datetime.datetime.now()
+            #c_total = b_total - a_total
+            #log('Total time needed for all queries: %s' % c_total)
             # give a possible other instance some time to notice the empty property
             WINDOW.setProperty('SkinWidgets_Running', 'true')
             self._daemon()
@@ -107,18 +107,18 @@ class Main:
                     self.RESUME = "false"
 
     def _fetch_info_recommended(self):
-        a = datetime.datetime.now()
+        #a = datetime.datetime.now()
         if __addon__.getSetting("recommended_enable") == 'true':
             self._fetch_movies('RecommendedMovie')
             self._fetch_tvshows_recommended('RecommendedEpisode')
             self._fetch_albums('RecommendedAlbum')
             self._fetch_musicvideos('RecommendedMusicVideo')
-            b = datetime.datetime.now()
-            c = b - a
-            log('Total time needed to request recommended queries: %s' % c)
+            #b = datetime.datetime.now()
+            #c = b - a
+            #log('Total time needed to request recommended queries: %s' % c)
 
     def _fetch_info_randomitems(self):
-        a = datetime.datetime.now()
+        #a = datetime.datetime.now()
         if __addon__.getSetting("randomitems_enable") == 'true':
             self._fetch_movies('RandomMovie')
             self._fetch_tvshows('RandomEpisode')
@@ -127,20 +127,20 @@ class Main:
             self._fetch_artists('RandomArtist')
             self._fetch_songs('RandomSong')
             self._fetch_addons('RandomAddon')
-            b = datetime.datetime.now()
-            c = b - a
-            log('Total time needed to request random queries: %s' % c)
+            #b = datetime.datetime.now()
+            #c = b - a
+            #log('Total time needed to request random queries: %s' % c)
 
     def _fetch_info_recentitems(self):
-        a = datetime.datetime.now()
+        #a = datetime.datetime.now()
         if __addon__.getSetting("recentitems_enable") == 'true':
             self._fetch_movies('RecentMovie')
             self._fetch_tvshows('RecentEpisode')
             self._fetch_musicvideos('RecentMusicVideo')
             self._fetch_albums('RecentAlbum')
-            b = datetime.datetime.now()
-            c = b - a
-            log('Total time needed to request recent items queries: %s' % c)
+            #b = datetime.datetime.now()
+            #c = b - a
+            #log('Total time needed to request recent items queries: %s' % c)
             
     def _fetch_movies(self, request):
         if not xbmc.abortRequested:
