@@ -100,7 +100,7 @@ class gui:
                 WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
         del data
 
-    def tvshows_recommended(self, request, data):
+    def episodes_recommended(self, request, data):
         if data:
             clear_properties(request)
             count = 0
@@ -172,7 +172,7 @@ class gui:
                 WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
         del data
 
-    def tvshows(self, request, data):
+    def episodes(self, request, data):
         if data:
             season_folders = __addon__.getSetting("randomitems_seasonfolders")
             clear_properties(request)

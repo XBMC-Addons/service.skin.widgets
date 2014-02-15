@@ -50,7 +50,7 @@ class req:
         else:
             return False
 
-    def tvshows(self, request):
+    def episodes(self, request):
         json_string = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetEpisodes", "params": { "properties": ["title", "playcount", "season", "episode", "showtitle", "plot", "file", "rating", "resume", "tvshowid", "art", "streamdetails", "firstaired", "runtime"], "limits": {"end": %d},' %LIMIT
         if request == 'RecentEpisode' and RECENTITEMS_UNPLAYED:
             json_query = xbmc.executeJSONRPC('%s "sort": {"order": "descending", "method": "dateadded"}, "filter": {"field": "playcount", "operator": "lessthan", "value": "1"}}}' %json_string)
@@ -67,7 +67,7 @@ class req:
         else:
             return False
 
-    def tvshows_recommended(self, request):
+    def episodes_recommended(self, request):
         if not xbmc.abortRequested:
             # First unplayed episode of recent played tvshows
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShows", "params": {"properties": ["title", "studio", "mpaa", "file", "art"], "sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}, "limits": {"end": %d}}, "id": 1}' %LIMIT)

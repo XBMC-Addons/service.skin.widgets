@@ -110,7 +110,7 @@ class Main:
         #a = datetime.datetime.now()
         if __addon__.getSetting("recommended_enable") == 'true':
             self._fetch_movies('RecommendedMovie')
-            self._fetch_tvshows_recommended('RecommendedEpisode')
+            self._fetch_episodes_recommended('RecommendedEpisode')
             self._fetch_albums('RecommendedAlbum')
             self._fetch_musicvideos('RecommendedMusicVideo')
             #b = datetime.datetime.now()
@@ -147,15 +147,15 @@ class Main:
             data = REQ.movies(request)
             GUI.movies(request, data)
 
-    def _fetch_tvshows_recommended(self, request):
+    def _fetch_episodes_recommended(self, request):
         if not xbmc.abortRequested:
-            data = REQ.tvshows_recommended(request)
-            GUI.tvshows_recommended(request, data)
+            data = REQ.episodes_recommended(request)
+            GUI.episodes_recommended(request, data)
 
     def _fetch_tvshows(self, request):
         if not xbmc.abortRequested:
-            data = REQ.tvshows(request)
-            GUI.tvshows(request, data)
+            data = REQ.episodes(request)
+            GUI.episodes(request, data)
 
     def _fetch_musicvideos(self, request):
         if not xbmc.abortRequested:
@@ -210,12 +210,12 @@ class Main:
             self._fetch_movies('RecommendedMovie')
             self._fetch_movies('RecentMovie')
         elif type == 'episode':
-            self._fetch_tvshows_recommended('RecommendedEpisode')
+            self._fetch_episodes_recommended('RecommendedEpisode')
             self._fetch_tvshows('RecentEpisode')
         elif type == 'video':
             #only on db update
             self._fetch_movies('RecommendedMovie')
-            self._fetch_tvshows_recommended('RecommendedEpisode')
+            self._fetch_episodes_recommended('RecommendedEpisode')
             self._fetch_movies('RecentMovie')
             self._fetch_tvshows('RecentEpisode')
             self._fetch_musicvideos('RecentMusicVideo')
