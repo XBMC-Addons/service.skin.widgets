@@ -19,11 +19,10 @@
 #    This script is based on script.randomitems & script.wacthlist
 #    Thanks to their original authors
 
+import sys
 import xbmc
 import xbmcgui
 import datetime
-import _strptime
-import urllib
 import lib.common
 from lib.common import log
 from lib.utils import media_path, media_streamdetails
@@ -75,12 +74,12 @@ class Main:
         self.Monitor = Widgets_Monitor(update_listitems = self._update, update_settings = self._on_change)
 
     def _on_change(self):
-        clearlist_groups = ['Recommended','Random','Recent']
-        clearlist_types = ['Movie','Episode','MusicVideo','Album', 'Artist','Song','Addon']
-        for item_group in clearlist_groups:
-            for item_type in clearlist_types:
-                clear = item_group + item_type
-                self._clear_properties(clear)
+        #clearlist_groups = ['Recommended','Random','Recent']
+        #clearlist_types = ['Movie','Episode','MusicVideo','Album', 'Artist','Song','Addon']
+        #for item_group in clearlist_groups:
+        #   for item_type in clearlist_types:
+        #        clear = item_group + item_type
+        #        _clear_properties(clear)
         self._init_property()
         self._fetch_info_randomitems()
         self._fetch_info_recommended()
@@ -151,35 +150,43 @@ class Main:
             
     def _fetch_movies(self, request):
         if not xbmc.abortRequested:
-            GUI.movies(request)
+            data = REQ.movies(request)
+            GUI.movies(request, data)
 
     def _fetch_tvshows_recommended(self, request):
         if not xbmc.abortRequested:
-            GUI.tvshows_recommended(request)
+            data = REQ.tvshows_recommended(request)
+            GUI.tvshows_recommended(request, data)
 
     def _fetch_tvshows(self, request):
         if not xbmc.abortRequested:
-            GUI.tvshows(request)
+            data = REQ.tvshows(request)
+            GUI.tvshows(request, data)
 
     def _fetch_musicvideos(self, request):
         if not xbmc.abortRequested:
-            GUI.musicvideos(request)
+            data = REQ.musicvideos(request)
+            GUI.musicvideos(request, data)
 
     def _fetch_albums(self, request):
         if not xbmc.abortRequested:
-            GUI.albums(request)
+            data = REQ.albums(request)
+            GUI.albums(request, data)
 
     def _fetch_artists(self, request):
         if not xbmc.abortRequested:
-            GUI.artists(request)
+            data = REQ.artist(request)
+            GUI.artists(request, data)
 
     def _fetch_songs(self, request):
         if not xbmc.abortRequested:
-            GUI.songs(request)
+            data = REQ.songs(request)
+            GUI.songs(request, data)
 
     def _fetch_addons(self, request):
         if not xbmc.abortRequested:
-            GUI.addons(request)
+            data = REQ.addons(request)
+            GUI.addons(request, data)
 
     def _daemon(self):
         # deamon is meant to keep script running at all time

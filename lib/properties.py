@@ -23,7 +23,9 @@ from lib.requests import req
 import os
 import random
 import sys
+import xbmc
 import xbmcgui
+import xbmcvfs
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -32,18 +34,17 @@ else:
 __addon__        = lib.common.__addon__
 __addonid__      = lib.common.__addonid__
 __localize__     = lib.common.__localize__
-REQ = req()
+
 WINDOW = xbmcgui.Window(10000)
 LIMIT = 20
 PLOT_ENABLE = __addon__.getSetting("plot_enable")  == 'true'
 
 class gui:
-    def movies(self, request):
-        json_query = REQ.movies(request)
-        if json_query:
+    def movies(self, request, data):
+        if data:
             clear_properties(request)
             count = 0
-            for item in json_query['result']['movies']:
+            for item in data['result']['movies']:
                 count += 1
                 if (item['resume']['position'] and item['resume']['total'])> 0:
                     resume = "true"
@@ -97,22 +98,21 @@ class gui:
                 WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
                 WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
                 WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
-        del json_query
+        del data
 
-    def tvshows_recommended(self, request):
-        json_query = REQ.tvshows_recommended(request)
-        if json_query:
+    def tvshows_recommended(self, request, data):
+        if data:
             clear_properties(request)
             count = 0
-            for item in json_query['result']['tvshows']:
+            for item in data['result']['tvshows']:
                 if xbmc.abortRequested:
                     break
                 count += 1
-                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": %d, "properties": ["title", "playcount", "plot", "season", "episode", "showtitle", "file", "lastplayed", "rating", "resume", "art", "streamdetails", "firstaired", "runtime"], "sort": {"method": "episode"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}, "limits": {"end": 1}}, "id": 1}' %item['tvshowid'])
-                json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-                json_query2 = simplejson.loads(json_query2)
-                if json_query2.has_key('result') and json_query2['result'] != None and json_query2['result'].has_key('episodes'):
-                    for item2 in json_query2['result']['episodes']:
+                data2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {"tvshowid": %d, "properties": ["title", "playcount", "plot", "season", "episode", "showtitle", "file", "lastplayed", "rating", "resume", "art", "streamdetails", "firstaired", "runtime"], "sort": {"method": "episode"}, "filter": {"field": "playcount", "operator": "is", "value": "0"}, "limits": {"end": 1}}, "id": 1}' %item['tvshowid'])
+                data2 = unicode(data2, 'utf-8', errors='ignore')
+                data2 = simplejson.loads(data2)
+                if data2.has_key('result') and data2['result'] != None and data2['result'].has_key('episodes'):
+                    for item2 in data2['result']['episodes']:
                         episode = ("%.2d" % float(item2['episode']))
                         season = "%.2d" % float(item2['season'])
                         rating = str(round(float(item2['rating']),1))
@@ -129,7 +129,7 @@ class gui:
                     watched = "true"
                 else:
                     watched = "false"
-                if not self.PLOT_ENABLE and watched == "false":
+                if not PLOT_ENABLE and watched == "false":
                     plot = __localize__(32014)
                 else:
                     plot = item2['plot']
@@ -170,24 +170,23 @@ class gui:
                 WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
                 WINDOW.setProperty("%s.%d.AudioCodec"          % (request, count), streaminfo['audiocodec'])
                 WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
-        del json_query
+        del data
 
-    def tvshows(self, request):
-        json_query = REQ.tvshows(request)
-        if json_query:
+    def tvshows(self, request, data):
+        if data:
             season_folders = __addon__.getSetting("randomitems_seasonfolders")
             clear_properties(request)
             count = 0
-            for item in json_query['result']['episodes']:
+            for item in data['result']['episodes']:
                 count += 1
                 '''
                 # This part is commented out because it takes 1.5second extra on my system to request these which doubles the total time.
                 # Hence the ugly path hack that will require users to have season folders.
-                json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["file", "studio"], "tvshowid":%s}, "id": 1}' %item['tvshowid'])
-                json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-                json_query2 = simplejson.loads(json_query2)
-                path = json_query2['result']['tvshowdetails']['file']
-                studio = json_query2['result']['tvshowdetails']['studio'][0]
+                data2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["file", "studio"], "tvshowid":%s}, "id": 1}' %item['tvshowid'])
+                data2 = unicode(data2, 'utf-8', errors='ignore')
+                data2 = simplejson.loads(data2)
+                path = data2['result']['tvshowdetails']['file']
+                studio = data2['result']['tvshowdetails']['studio'][0]
                 '''
                 if season_folders == 'true':
                     path = os.path.split(media_path(item['file']))[0]
@@ -246,14 +245,13 @@ class gui:
                 WINDOW.setProperty("%s.%d.VideoAspect"         % (request, count), streaminfo['videoaspect'])
                 WINDOW.setProperty("%s.%d.AudioCodec"          % (request, count), streaminfo['audiocodec'])
                 WINDOW.setProperty("%s.%d.AudioChannels"       % (request, count), str(streaminfo['audiochannels']))
-        del json_query
+        del data
 
-    def musicvideos(self, request):
-        json_query = REQ.musicvideos(request)
-        if json_query:
+    def musicvideos(self, request, data):
+        if data:
             clear_properties(request)        
             count = 0
-            for item in json_query['result']['musicvideos']:
+            for item in data['result']['musicvideos']:
                 count += 1
                 if (item['resume']['position'] and item['resume']['total'])> 0:
                     resume = "true"
@@ -291,14 +289,13 @@ class gui:
                 WINDOW.setProperty("%s.%d.VideoAspect"     % (request, count), streaminfo['videoaspect'])
                 WINDOW.setProperty("%s.%d.AudioCodec"      % (request, count), streaminfo['audiocodec'])
                 WINDOW.setProperty("%s.%d.AudioChannels"   % (request, count), str(streaminfo['audiochannels']))
-        del json_query
+        del data
 
-    def albums(self, request):
-        json_query = REQ.albums(request)
-        if json_query:
+    def albums(self, request, data):
+        if data:
             clear_properties(request)
             count = 0
-            for item in json_query['result']['albums']:
+            for item in data['result']['albums']:
                 count += 1
                 rating = str(item['rating'])
                 if rating == '48':
@@ -321,14 +318,13 @@ class gui:
                 WINDOW.setProperty("%s.%d.Art(thumb)"  % (request, count), item['thumbnail'])
                 WINDOW.setProperty("%s.%d.Art(fanart)" % (request, count), item['fanart'])
                 WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
-        del json_query
+        del data
         
-    def artists(self, request):
-        json_query = REQ.artist(request)
-        if json_query:
+    def artists(self, request, data):
+        if data:
             clear_properties(request)
             count = 0
-            for item in json_query['result']['artists']:
+            for item in data['result']['artists']:
                 count += 1
                 path = 'musicdb://2/' + str(item['artistid']) + '/'
                 WINDOW.setProperty("%s.%d.Title"       % (request, count), item['label'])
@@ -348,12 +344,11 @@ class gui:
                 WINDOW.setProperty("%s.%d.Instrument"  % (request, count), " / ".join(item['instrument']))
                 WINDOW.setProperty("%s.%d.LibraryPath" % (request, count), path)
                 
-    def songs(self, request):
-        json_query = REQ.songs(request)
-        if json_query:
+    def songs(self, request, data):
+        if data:
             clear_properties(request)
             count = 0
-            for item in json_query['result']['songs']:
+            for item in data['result']['songs']:
                 count += 1
                 play = 'XBMC.RunScript(' + __addonid__ + ',songid=' + str(item.get('songid')) + ')'
                 path = media_path(item['file'])
@@ -369,14 +364,13 @@ class gui:
                 WINDOW.setProperty("%s.%d.File"        % (request, count), item['file'])
                 WINDOW.setProperty("%s.%d.Path"        % (request, count), path)
                 WINDOW.setProperty("%s.%d.Play"        % (request, count), play)
-        del json_query  
+        del data  
 
-    def addons(self, request):
-        json_query = REQ.addons(request)
-        if json_query:
+    def addons(self, request, data):
+        if data:
             # find plugins and scripts
             addonlist = []
-            for item in json_query['result']['addons']:
+            for item in data['result']['addons']:
                 if item['type'] == 'xbmc.python.script' or item['type'] == 'xbmc.python.pluginsource':
                     addonlist.append(item)
             # randomize the list
@@ -398,8 +392,8 @@ class gui:
                 # stop if we've reached the number of items we need
                 if count == LIMIT:
                     break
-            WINDOW.setProperty("%s.Count" % (request), str(json_query['result']['limits']['total']))
-        del json_query
+            WINDOW.setProperty("%s.Count" % (request), str(data['result']['limits']['total']))
+        del data
 
 def clear_properties(request):
     count = 0
