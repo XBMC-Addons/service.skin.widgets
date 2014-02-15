@@ -74,12 +74,6 @@ class Main:
         self.Monitor = Widgets_Monitor(update_listitems = self._update, update_settings = self._on_change)
 
     def _on_change(self):
-        #clearlist_groups = ['Recommended','Random','Recent']
-        #clearlist_types = ['Movie','Episode','MusicVideo','Album', 'Artist','Song','Addon']
-        #for item_group in clearlist_groups:
-        #   for item_type in clearlist_types:
-        #        clear = item_group + item_type
-        #        _clear_properties(clear)
         self._init_property()
         self._fetch_info_randomitems()
         self._fetch_info_recommended()
