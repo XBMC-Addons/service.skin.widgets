@@ -1,5 +1,6 @@
 v0.0.30
-- refactor
+- Refactor
+- Fix item2 could be undefined
 
 v0.0.29
 - Fix script error on XBMC Helix due to empty array
